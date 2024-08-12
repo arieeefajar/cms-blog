@@ -22,7 +22,9 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['guest'])->group(function () {
     Route::get('/', [AuthController::class, 'index'])->name('login');
     Route::post('/login', [AuthController::class, 'prosesLogin'])->name('prosesLogin');
+
     Route::get('/register', [AuthController::class, 'register'])->name('register');
+    Route::post('/proses-register', [AuthController::class, 'prosesRegister'])->name('prosesRegister');
 });
 
 Route::middleware(['auth'])->group(function () {
