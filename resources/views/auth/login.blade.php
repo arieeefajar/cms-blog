@@ -40,19 +40,22 @@
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
                                     </div>
-                                    <form class="user">
+                                    <form class="user" method="POST" action="{{ route('prosesLogin') }}">
+                                        @csrf
                                         <div class="form-group">
                                             <input type="username" class="form-control form-control-user"
-                                                id="exampleInputUsername" aria-describedby="usernameHelp"
-                                                placeholder="Enter Username...">
+                                                id="exampleInputUsername" name="username"
+                                                aria-describedby="usernameHelp" placeholder="Enter Username..." required
+                                                autofocus>
                                         </div>
                                         <div class="form-group">
                                             <input type="password" class="form-control form-control-user"
-                                                id="exampleInputPassword" placeholder="Password">
+                                                id="exampleInputPassword" name="password" placeholder="Password"
+                                                required>
                                         </div>
-                                        <a href="index.html" class="btn btn-primary btn-user btn-block">
+                                        <button type="submit" class="btn btn-primary btn-user btn-block">
                                             Login
-                                        </a>
+                                        </button>
                                     </form>
                                     <hr>
                                     <div class="text-center">
@@ -72,6 +75,8 @@
         </div>
 
     </div>
+
+    @include('sweetalert::alert')
 
     <!-- Bootstrap core JavaScript-->
     <script src="{{ asset('assets/vendor/jquery/jquery.min.js') }}"></script>
