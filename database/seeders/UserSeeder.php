@@ -21,6 +21,7 @@ class UserSeeder extends Seeder
                 'email' => 'admincms@gmail.com',
                 'password' => Hash::make('admin123'),
                 'role' => 'admin',
+                'status' => 'active',
             ]),
 
             User::create([
@@ -29,6 +30,7 @@ class UserSeeder extends Seeder
                 'email' => 'authorcms@gmail.com',
                 'password' => Hash::make('author123'),
                 'role' => 'author',
+                'status' => 'active',
             ]),
         ];
     }

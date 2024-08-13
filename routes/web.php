@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\UsersController;
+use Illuminate\Routing\RouteGroup;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,10 +24,26 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['guest'])->group(function () {
     Route::get('/', [AuthController::class, 'index'])->name('login');
     Route::post('/login', [AuthController::class, 'prosesLogin'])->name('prosesLogin');
+
     Route::get('/register', [AuthController::class, 'register'])->name('register');
+    Route::post('/proses-register', [AuthController::class, 'prosesRegister'])->name('prosesRegister');
 });
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'admin'])->name('dashboard');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+    Route::middleware(['auth', 'admin'])->group(function () {
+        Route::get('/dashboard', [DashboardController::class, 'admin'])->name('dashboard');
+
+        Route::prefix('users')->group(function () {
+            Route::get('/', [UsersController::class, 'index'])->name('users.index');
+            Route::post('/', [UsersController::class, 'store'])->name('users.store');
+            Route::put('/{id}', [UsersController::class, 'update'])->name('users.update');
+            Route::delete('/{id}', [UsersController::class, 'destroy'])->name('users.destroy');
+        });
+    });
+
+    Route::middleware(['auth', 'author'])->group(function () {
+        Route::get('/dashboard-author', [DashboardController::class, 'author'])->name('dashboard.author');
+    });
 });

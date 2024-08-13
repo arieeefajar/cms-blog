@@ -37,32 +37,38 @@
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-4">Create an Account!</h1>
                                     </div>
-                                    <form class="user">
+                                    <form class="user" method="POST" action="{{ route('prosesRegister') }}">
+                                        @csrf
                                         <div class="form-group">
                                             <input type="text" class="form-control form-control-user"
-                                                id="exampleFullName" placeholder="Full Name">
+                                                id="exampleFullName" placeholder="Full Name" name="fullname"
+                                                value="{{ old('fullname') }}" required>
                                         </div>
                                         <div class="form-group">
                                             <input type="text" class="form-control form-control-user"
-                                                id="exampleUsername" placeholder="Username">
+                                                id="exampleUsername" placeholder="Username" name="username"
+                                                value="{{ old('username') }}" required>
                                         </div>
                                         <div class="form-group">
                                             <input type="email" class="form-control form-control-user"
-                                                id="exampleInputEmail" placeholder="Email Address">
+                                                id="exampleInputEmail" placeholder="Email Address" name="email"
+                                                value="{{ old('email') }}" required>
                                         </div>
                                         <div class="form-group row">
                                             <div class="col-sm-6 mb-3 mb-sm-0">
                                                 <input type="password" class="form-control form-control-user"
-                                                    id="exampleInputPassword" placeholder="Password">
+                                                    id="exampleInputPassword" placeholder="Password" name="password"
+                                                    required>
                                             </div>
                                             <div class="col-sm-6">
                                                 <input type="password" class="form-control form-control-user"
-                                                    id="exampleRepeatPassword" placeholder="Repeat Password">
+                                                    id="exampleRepeatPassword" placeholder="Repeat Password"
+                                                    name="repeatpassword" required>
                                             </div>
                                         </div>
-                                        <a href="login.html" class="btn btn-primary btn-user btn-block">
+                                        <button type="submit" class="btn btn-primary btn-user btn-block">
                                             Register Account
-                                        </a>
+                                        </button>
                                     </form>
                                     <hr>
                                     <div class="text-center">
@@ -78,6 +84,8 @@
         </div>
 
     </div>
+
+    @include('sweetalert::alert')
 
     <!-- Bootstrap core JavaScript-->
     <script src="{{ asset('assets/vendor/jquery/jquery.min.js') }}"></script>
