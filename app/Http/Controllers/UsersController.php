@@ -12,7 +12,7 @@ class UsersController extends Controller
     public function index()
     {
         $author = User::where('role', 'author')->orderBy('created_at', 'desc')->get();
-        return view('masterdata.users.index', compact('author'));
+        return view('masterdata.users', compact('author'));
     }
 
     public function store(Request $request)
