@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\KategoryController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Routing\RouteGroup;
 use Illuminate\Support\Facades\Route;
@@ -40,6 +41,13 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/', [UsersController::class, 'store'])->name('users.store');
             Route::put('/{id}', [UsersController::class, 'update'])->name('users.update');
             Route::delete('/{id}', [UsersController::class, 'destroy'])->name('users.destroy');
+        });
+
+        Route::prefix('kategori')->group(function () {
+            Route::get('/', [KategoryController::class, 'index'])->name('kategory.index');
+            Route::post('/', [KategoryController::class, 'store'])->name('kategory.store');
+            Route::put('/{id}', [KategoryController::class, 'update'])->name('kategory.update');
+            Route::delete('/{id}', [KategoryController::class, 'destroy'])->name('kategory.destroy');
         });
     });
 
