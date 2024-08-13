@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Author\PostController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KategoryController;
 use App\Http\Controllers\UsersController;
@@ -53,5 +54,9 @@ Route::middleware(['auth'])->group(function () {
 
     Route::middleware(['auth', 'author'])->group(function () {
         Route::get('/dashboard-author', [DashboardController::class, 'author'])->name('dashboard.author');
+
+        Route::prefix('posts')->group(function () {
+            Route::get('/', [PostController::class, 'index'])->name('posts.index');
+        });
     });
 });
