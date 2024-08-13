@@ -40,6 +40,9 @@ class AuthController extends Controller
             if ($users->role == 'admin') {
                 toast('Login Berhasil', 'success')->position('top')->autoClose(3000);
                 return redirect()->route('dashboard');
+            } elseif ($users->role == 'author') {
+                toast('Login Berhasil', 'success')->position('top')->autoClose(3000);
+                return redirect()->route('dashboard.author');
             }
         } else {
             toast('Username atau Password salah', 'error')->position('top')->autoClose(3000);
@@ -102,12 +105,11 @@ class AuthController extends Controller
                 alert()->success('Berhasil', 'Register Akun, Silahkan Login Untuk Melanjutkan');
                 return redirect()->route('login');
             } catch (\Throwable $th) {
-                return $th->getMessage();
                 alert()->error('Gagal', 'Register Akun');
                 return redirect()->back()->withInput();
             }
         } else {
-            alert()->error('Gagal', 'Password tidak sama');
+            alert()->error('Gagal', 'Repeat Password tidak sama');
             return redirect()->back()->withInput();
         }
     }

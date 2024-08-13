@@ -11,4 +11,9 @@ class DashboardController extends Controller
     {
         return view('dashboard.admin');
     }
+
+    public function author()
+    {
+        return view('dashboard.author');
+    }
 }

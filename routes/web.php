@@ -28,6 +28,13 @@ Route::middleware(['guest'])->group(function () {
 });
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'admin'])->name('dashboard');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+    Route::middleware(['auth', 'admin'])->group(function () {
+        Route::get('/dashboard', [DashboardController::class, 'admin'])->name('dashboard');
+    });
+
+    Route::middleware(['auth', 'author'])->group(function () {
+        Route::get('/dashboard-author', [DashboardController::class, 'author'])->name('dashboard.author');
+    });
 });
