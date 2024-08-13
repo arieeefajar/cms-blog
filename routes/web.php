@@ -45,6 +45,9 @@ Route::middleware(['auth'])->group(function () {
 
         Route::prefix('kategori')->group(function () {
             Route::get('/', [KategoryController::class, 'index'])->name('kategory.index');
+            Route::post('/', [KategoryController::class, 'store'])->name('kategory.store');
+            Route::put('/{id}', [KategoryController::class, 'update'])->name('kategory.update');
+            Route::delete('/{id}', [KategoryController::class, 'destroy'])->name('kategory.destroy');
         });
     });
 
