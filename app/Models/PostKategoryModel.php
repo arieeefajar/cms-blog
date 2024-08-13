@@ -12,4 +12,14 @@ class PostKategoryModel extends Model
     protected $table = 'post_kategory';
 
     protected $guarded = ['id'];
+
+    public function posts()
+    {
+        return $this->hasMany(PostModel::class, 'id', 'post_id');
+    }
+
+    public function kategory()
+    {
+        return $this->belongsTo(KategoryModel::class, 'kategory_id', 'id');
+    }
 }

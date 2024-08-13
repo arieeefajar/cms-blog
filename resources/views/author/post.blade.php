@@ -31,32 +31,32 @@
                         </tr>
                     </tfoot>
                     <tbody>
-                        <tr class="text-center">
-                            <td>1</td>
-                            <td>Tiger Nixon</td>
-                            <td>
-                                <ul class="list-unstyled">
-                                    <li>
-                                        testing
-                                    </li>
-                                    <li>
-                                        testing
-                                    </li>
-                                    <li>
-                                        testing
-                                    </li>
-                                </ul>
-                            </td>
-                            <td>Edinburgh</td>
-                            <td>
-                                <div class="justify-content-center">
-                                    <a href="#" data-toggle="modal" data-target="#updateModal"
-                                        class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
-                                    <a href="#" data-toggle="modal" data-target="#deleteModal"
-                                        class="btn btn-danger btn-sm""><i class="fas fa-trash"></i></a>
-                                </div>
-                            </td>
-                        </tr>
+                        @foreach ($post as $index => $item)
+                            <tr class="text-center">
+                                <td>{{ $index + 1 }}</td>
+                                <td>{{ $item->title }}</td>
+                                <td>
+                                    <ul class="list-unstyled">
+                                        @foreach ($item->kategory as $kategoryPost)
+                                            <li>
+                                                {{ $kategoryPost->name }}
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </td>
+                                <td>{{ $item->description }}</td>
+                                <td>
+                                    <div class="justify-content-center">
+                                        <a href="#" data-toggle="modal" data-target="#updateModal"
+                                            class="btn btn-warning btn-sm" onclick="updateData({{ $item }})"><i
+                                                class="fas fa-edit"></i></a>
+                                        <a href="#" data-toggle="modal" data-target="#deleteModal"
+                                            class="btn btn-danger btn-sm" onclick="deleteData({{ $item->id }})"><i
+                                                class="fas fa-trash"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>
@@ -75,7 +75,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('users.store') }}" method="POST" id="addForm">
+                    <form action="{{ route('posts.store') }}" method="POST" id="addForm">
                         @csrf
                         <div class="form-group">
                             <label for="exampleTitle" class="form-label">Title</label>
@@ -87,18 +87,95 @@
                             <textarea class="form-control" id="addDescription" name="description" rows="3">{{ old('description') }}</textarea>
                         </div>
                         <div class="form-group">
-                            <label for="exampleKategory" class="form-label">Kategory</label>
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input" id="addKategory" name="kategory_id[]"
-                                    value="1">
-                                <label class="form-check-label">tes</label>
-                            </div>
+                            <label for="exampleKategory" class="form-label">Select Kategory</label>
+                            <br>
+                            @foreach ($kategory as $item)
+                                <div class="form-check d-inline">
+                                    <input type="checkbox" class="form-check-input" id="addKategory_{{ $item->id }}"
+                                        name="kategory_id[]" value="{{ $item->id }}">
+                                    <label class="form-check-label"
+                                        for="addKategory_{{ $item->id }}">{{ $item->name }}</label>
+                                </div>
+                            @endforeach
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
                     <button class="btn btn-primary" type="submit" form="addForm">Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update Modal-->
+    <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Update Post</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="" method="POST" id="updateForm">
+                        @csrf
+                        @method('PUT')
+                        <div class="form-group">
+                            <label for="exampleTitle" class="form-label">Title</label>
+                            <input type="text" class="form-control form-control-user" id="addTitleUpdate"
+                                placeholder="Enter title" name="title" value="{{ old('title') }}" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleDescription" class="form-label">Description</label>
+                            <textarea class="form-control" id="addDescriptionUpdate" name="description" rows="3">{{ old('description') }}</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleKategory" class="form-label">Select Kategory</label>
+                            <br>
+                            @foreach ($kategory as $item)
+                                <div class="form-check d-inline">
+                                    <input type="checkbox" class="form-check-input"
+                                        id="addKategoryUpdate_{{ $item->id }}" name="kategory_id[]"
+                                        value="{{ $item->id }}">
+                                    <label class="form-check-label"
+                                        for="addKategoryUpdate_{{ $item->id }}">{{ $item->name }}</label>
+                                </div>
+                            @endforeach
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-primary" type="submit" form="updateForm">Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Modal-->
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Delete Post</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="" method="POST" id="deleteForm">
+                        @csrf
+                        @method('DELETE')
+                        Are you sure you want to delete this post?
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <button class="btn btn-primary" type="submit" form="deleteForm">Delete</button>
                 </div>
             </div>
         </div>
@@ -117,4 +194,24 @@
 
     <!-- Page level custom scripts -->
     <script src="{{ asset('assets/js/demo/datatables-demo.js') }}"></script>
+
+    <script>
+        //function update
+        function updateData(data) {
+            console.log(data);
+            const form = document.getElementById('updateForm');
+            form.action = "{{ route('posts.update', ':id') }}".replace(':id', data.id);
+            form.querySelector('#addTitleUpdate').value = data.title;
+            form.querySelector('#addDescriptionUpdate').value = data.description;
+
+            data.kategory.forEach((item) => {
+                form.querySelector('#addKategoryUpdate_' + item.id).checked = true;
+            });
+        }
+
+        function deleteData(id) {
+            const form = document.getElementById('deleteForm');
+            form.action = "{{ route('posts.destroy', ':id') }}".replace(':id', id);
+        }
+    </script>
 @endsection

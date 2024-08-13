@@ -15,8 +15,13 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('description');
-            $table->enum('status', ['approved', 'pending', 'rejected'])->default('pending');
+            $table->enum('status', ['published', 'pending', 'rejected'])->default('pending');
+            $table->unsignedBigInteger('user_id');
             $table->timestamps();
+        });
+
+        Schema::table('posts', function (Blueprint $table) {
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 

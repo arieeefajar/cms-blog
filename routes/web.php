@@ -57,6 +57,9 @@ Route::middleware(['auth'])->group(function () {
 
         Route::prefix('posts')->group(function () {
             Route::get('/', [PostController::class, 'index'])->name('posts.index');
+            Route::post('/', [PostController::class, 'store'])->name('posts.store');
+            Route::put('/{id}', [PostController::class, 'update'])->name('posts.update');
+            Route::delete('/{id}', [PostController::class, 'destroy'])->name('posts.destroy');
         });
     });
 });

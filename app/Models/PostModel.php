@@ -15,5 +15,22 @@ class PostModel extends Model
         'title',
         'description',
         'status',
+        'user_id'
     ];
+
+    public function postKategory()
+    {
+
+        return $this->hasMany(PostKategoryModel::class, 'post_id', 'id');
+    }
+
+    public function users()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    public function kategory()
+    {
+        return $this->belongsToMany(KategoryModel::class, 'post_kategory', 'post_id', 'kategory_id');
+    }
 }
