@@ -13,7 +13,7 @@ class PostController extends Controller
 {
     public function index()
     {
-        $post = PostModel::with('users')->where('status', 'published')->orderBy('created_at', 'desc')->get();
+        $post = PostModel::with('users')->orderByRaw("CASE WHEN status = 'pending' THEN 0 ELSE 1 END")->orderBy('created_at', 'desc')->get();
         $kategory = KategoryModel::all();
         return view('masterdata.post', compact('post', 'kategory'));
     }

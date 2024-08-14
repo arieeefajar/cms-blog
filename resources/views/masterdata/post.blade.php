@@ -20,6 +20,7 @@
                             <th>Kategory</th>
                             <th>Description</th>
                             <th>Status</th>
+                            <th>Published</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -30,6 +31,7 @@
                             <th>Kategory</th>
                             <th>Description</th>
                             <th>Status</th>
+                            <th>Published</th>
                             <th>Action</th>
                         </tr>
                     </tfoot>
@@ -48,6 +50,15 @@
                                     </ul>
                                 </td>
                                 <td>{{ $item->description }}</td>
+                                <td>
+                                    @if ($item->status == 'published')
+                                        <span class="badge badge-success">Approved</span>
+                                    @elseif($item->status == 'pending')
+                                        <span class="badge badge-warning">Pending</span>
+                                    @else
+                                        <span class="badge badge-danger">Rejected</span>
+                                    @endif
+                                </td>
                                 <td>
                                     @if ($item->status_published == 'active')
                                         <span class="badge badge-success">{{ $item->status_published }}</span>

@@ -14,7 +14,7 @@ class PostController extends Controller
 {
     public function index()
     {
-        $post = PostModel::with('kategory')->where('status', 'published')->where('user_id', Auth::user()->id)->orderBy('created_at', 'desc')->get();
+        $post = PostModel::with('kategory')->where('user_id', Auth::user()->id)->orderBy('created_at', 'desc')->get();
         $kategory = KategoryModel::all();
         return view('author.post', compact('post', 'kategory'));
     }
