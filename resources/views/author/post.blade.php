@@ -153,7 +153,7 @@
                             <label for="exampleDescription" class="form-label">Description</label>
                             <textarea class="form-control" id="addDescriptionUpdate" name="description" rows="3">{{ old('description') }}</textarea>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" id="divStatus">
                             <label for="exampleStatus" class="form-label">Status</label>
                             <select name="status_published" id="updateStatusPubished" class="form-control">
                                 <option value="" selected disabled>Select Status</option>
@@ -232,7 +232,14 @@
             form.action = "{{ route('posts.update', ':id') }}".replace(':id', data.id);
             form.querySelector('#addTitleUpdate').value = data.title;
             form.querySelector('#addDescriptionUpdate').value = data.description;
+
+            if (data.status == 'published') {
+                form.querySelector('#divStatus').style.display = 'block';
+            } else {
+                form.querySelector('#divStatus').style.display = 'none';
+            }
             form.querySelector('#updateStatusPubished').value = data.status_published;
+
 
             data.kategory.forEach((item) => {
                 form.querySelector('#addKategoryUpdate_' + item.id).checked = true;
