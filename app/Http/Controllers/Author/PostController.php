@@ -88,6 +88,7 @@ class PostController extends Controller
         $post = PostModel::find($id);
         $post->title = $request->title;
         $post->description = $request->description;
+        $post->status_published = $request->status_published;
         $post->user_id = Auth::user()->id;
 
         $post->kategory()->detach();

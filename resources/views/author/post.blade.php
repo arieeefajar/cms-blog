@@ -143,6 +143,14 @@
                             <textarea class="form-control" id="addDescriptionUpdate" name="description" rows="3">{{ old('description') }}</textarea>
                         </div>
                         <div class="form-group">
+                            <label for="exampleStatus" class="form-label">Status</label>
+                            <select name="status_published" id="updateStatusPubished" class="form-control">
+                                <option value="" selected disabled>Select Status</option>
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
                             <label for="exampleKategory" class="form-label">Select Kategory</label>
                             <br>
                             @foreach ($kategory as $item)
@@ -213,6 +221,7 @@
             form.action = "{{ route('posts.update', ':id') }}".replace(':id', data.id);
             form.querySelector('#addTitleUpdate').value = data.title;
             form.querySelector('#addDescriptionUpdate').value = data.description;
+            form.querySelector('#updateStatusPubished').value = data.status_published;
 
             data.kategory.forEach((item) => {
                 form.querySelector('#addKategoryUpdate_' + item.id).checked = true;
