@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ApprovalPostController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Author\PostController;
 use App\Http\Controllers\DashboardController;
@@ -49,6 +50,12 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/', [KategoryController::class, 'store'])->name('kategory.store');
             Route::put('/{id}', [KategoryController::class, 'update'])->name('kategory.update');
             Route::delete('/{id}', [KategoryController::class, 'destroy'])->name('kategory.destroy');
+        });
+
+        Route::prefix('approval-post')->group(function () {
+            Route::get('/', [ApprovalPostController::class, 'index'])->name('approval-post.index');
+            Route::put('/{id}', [ApprovalPostController::class, 'approve'])->name('approval-post.approve');
+            Route::put('/reject/{id}', [ApprovalPostController::class, 'reject'])->name('approval-post.reject');
         });
     });
 

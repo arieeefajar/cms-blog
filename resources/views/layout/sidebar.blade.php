@@ -12,11 +12,19 @@
     <hr class="sidebar-divider my-0">
 
     <!-- Nav Item - Dashboard -->
-    <li class="nav-item active">
-        <a class="nav-link" href="index.html">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Dashboard</span></a>
-    </li>
+    @if (Auth::user()->role == 'admin')
+        <li class="nav-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('dashboard') }}">
+                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <span>Dashboard</span></a>
+        </li>
+    @else
+        <li class="nav-item {{ request()->routeIs('dashboard.author') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('dashboard.author') }}">
+                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <span>Dashboard</span></a>
+        </li>
+    @endif
 
     <!-- Divider -->
     <hr class="sidebar-divider">
@@ -48,12 +56,23 @@
         </li>
     @endif
 
-    <!-- Nav Item - post -->
-    <li class="nav-item">
-        <a class="nav-link" href="{{ route('posts.index') }}">
-            <i class="far fa-newspaper"></i>
-            <span>Posts</span></a>
-    </li>
+    @if (Auth::user()->role == 'author')
+        <!-- Nav Item - post -->
+        <li class="nav-item {{ request()->routeIs('posts.index') ? 'active' : '' }}">
+            <a class="nav-link {{ request()->routeIs('posts.index') ? 'active' : '' }}"
+                href="{{ route('posts.index') }}">
+                <i class="far fa-newspaper"></i>
+                <span>Posts</span></a>
+        </li>
+    @else
+        <!-- Nav Item - post -->
+        <li class="nav-item {{ request()->routeIs('approval-post.index') ? 'active' : '' }}">
+            <a class="nav-link {{ request()->routeIs('approval-post.index') ? 'active' : '' }}"
+                href="{{ route('approval-post.index') }}">
+                <i class="far fa-newspaper"></i>
+                <span>Approval Posts</span></a>
+        </li>
+    @endif
 
     <!-- Nav Item - Utilities Collapse Menu -->
     <li class="nav-item">

@@ -54,11 +54,11 @@ class PostController extends Controller
                 $postKategory->kategory_id = $item;
                 $postKategory->save();
             }
-            alert()->success('Berhasil', 'Menambahkan Postingan');
+            alert()->success('Berhasil', 'Mengajukan Postingan');
             return redirect()->back();
         } catch (\Throwable $th) {
             //throw $th;
-            alert()->error('Gagal', 'Menambahkan Postingan');
+            alert()->error('Gagal', 'Mengajukan Postingan');
             return redirect()->back();
         }
     }
