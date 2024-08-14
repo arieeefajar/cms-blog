@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Author\PostController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KategoryController;
+use App\Http\Controllers\PostController as AdminPostController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Routing\RouteGroup;
 use Illuminate\Support\Facades\Route;
@@ -50,6 +51,10 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/', [KategoryController::class, 'store'])->name('kategory.store');
             Route::put('/{id}', [KategoryController::class, 'update'])->name('kategory.update');
             Route::delete('/{id}', [KategoryController::class, 'destroy'])->name('kategory.destroy');
+        });
+
+        Route::prefix('post-data')->group(function () {
+            Route::get('/', [AdminPostController::class, 'index'])->name('post-data.index');
         });
 
         Route::prefix('approval-post')->group(function () {

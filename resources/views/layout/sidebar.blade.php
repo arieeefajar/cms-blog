@@ -36,14 +36,15 @@
 
     <!-- Nav Item - Pages Collapse Menu -->
     @if (Auth::user()->role == 'admin')
-        <li class="nav-item {{ request()->routeIs('users.*') || request()->routeIs('kategory.*') ? 'active' : '' }}">
+        <li
+            class="nav-item {{ request()->routeIs('users.*') || request()->routeIs('kategory.*') || request()->routeIs('post-data.*') ? 'active' : '' }} ">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                 aria-expanded="true" aria-controls="collapseTwo">
                 <i class="fas fa-fw fa-cog"></i>
                 <span>Master Data</span>
             </a>
             <div id="collapseTwo"
-                class="collapse {{ request()->routeIs('users.*') || request()->routeIs('kategory.*') ? 'show' : '' }}"
+                class="collapse {{ request()->routeIs('users.*') || request()->routeIs('kategory.*') || request()->routeIs('post-data.*') ? 'show' : '' }}"
                 aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Master Data:</h6>
@@ -51,6 +52,8 @@
                         href="{{ route('users.index') }}">Author</a>
                     <a class="collapse-item {{ request()->routeIs('kategory.*') ? 'active' : '' }}"
                         href="{{ route('kategory.index') }}">Kategory</a>
+                    <a class="collapse-item {{ request()->routeIs('post-data.*') ? 'active' : '' }}"
+                        href="{{ route('post-data.index') }}">Posts</a>
                 </div>
             </div>
         </li>
