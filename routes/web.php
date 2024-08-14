@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\ApprovalPostController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Author\PostController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KategoryController;
 use App\Http\Controllers\UsersController;
@@ -49,9 +51,22 @@ Route::middleware(['auth'])->group(function () {
             Route::put('/{id}', [KategoryController::class, 'update'])->name('kategory.update');
             Route::delete('/{id}', [KategoryController::class, 'destroy'])->name('kategory.destroy');
         });
+
+        Route::prefix('approval-post')->group(function () {
+            Route::get('/', [ApprovalPostController::class, 'index'])->name('approval-post.index');
+            Route::put('/{id}', [ApprovalPostController::class, 'approve'])->name('approval-post.approve');
+            Route::put('/reject/{id}', [ApprovalPostController::class, 'reject'])->name('approval-post.reject');
+        });
     });
 
     Route::middleware(['auth', 'author'])->group(function () {
         Route::get('/dashboard-author', [DashboardController::class, 'author'])->name('dashboard.author');
+
+        Route::prefix('posts')->group(function () {
+            Route::get('/', [PostController::class, 'index'])->name('posts.index');
+            Route::post('/', [PostController::class, 'store'])->name('posts.store');
+            Route::put('/{id}', [PostController::class, 'update'])->name('posts.update');
+            Route::delete('/{id}', [PostController::class, 'destroy'])->name('posts.destroy');
+        });
     });
 });

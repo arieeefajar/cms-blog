@@ -12,11 +12,19 @@
     <hr class="sidebar-divider my-0">
 
     <!-- Nav Item - Dashboard -->
-    <li class="nav-item active">
-        <a class="nav-link" href="index.html">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Dashboard</span></a>
-    </li>
+    @if (Auth::user()->role == 'admin')
+        <li class="nav-item {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('dashboard') }}">
+                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <span>Dashboard</span></a>
+        </li>
+    @else
+        <li class="nav-item {{ request()->routeIs('dashboard.author') ? 'active' : '' }}">
+            <a class="nav-link" href="{{ route('dashboard.author') }}">
+                <i class="fas fa-fw fa-tachometer-alt"></i>
+                <span>Dashboard</span></a>
+        </li>
+    @endif
 
     <!-- Divider -->
     <hr class="sidebar-divider">
@@ -27,24 +35,44 @@
     </div>
 
     <!-- Nav Item - Pages Collapse Menu -->
-    <li class="nav-item {{ request()->routeIs('users.*') || request()->routeIs('kategory.*') ? 'active' : '' }}">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-            aria-expanded="true" aria-controls="collapseTwo">
-            <i class="fas fa-fw fa-cog"></i>
-            <span>Master Data</span>
-        </a>
-        <div id="collapseTwo"
-            class="collapse {{ request()->routeIs('users.*') || request()->routeIs('kategory.*') ? 'show' : '' }}"
-            aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Master Data:</h6>
-                <a class="collapse-item {{ request()->routeIs('users.*') ? 'active' : '' }}"
-                    href="{{ route('users.index') }}">Author</a>
-                <a class="collapse-item {{ request()->routeIs('kategory.*') ? 'active' : '' }}"
-                    href="{{ route('kategory.index') }}">Kategori</a>
+    @if (Auth::user()->role == 'admin')
+        <li class="nav-item {{ request()->routeIs('users.*') || request()->routeIs('kategory.*') ? 'active' : '' }}">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+                aria-expanded="true" aria-controls="collapseTwo">
+                <i class="fas fa-fw fa-cog"></i>
+                <span>Master Data</span>
+            </a>
+            <div id="collapseTwo"
+                class="collapse {{ request()->routeIs('users.*') || request()->routeIs('kategory.*') ? 'show' : '' }}"
+                aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Master Data:</h6>
+                    <a class="collapse-item {{ request()->routeIs('users.*') ? 'active' : '' }}"
+                        href="{{ route('users.index') }}">Author</a>
+                    <a class="collapse-item {{ request()->routeIs('kategory.*') ? 'active' : '' }}"
+                        href="{{ route('kategory.index') }}">Kategory</a>
+                </div>
             </div>
-        </div>
-    </li>
+        </li>
+    @endif
+
+    @if (Auth::user()->role == 'author')
+        <!-- Nav Item - post -->
+        <li class="nav-item {{ request()->routeIs('posts.index') ? 'active' : '' }}">
+            <a class="nav-link {{ request()->routeIs('posts.index') ? 'active' : '' }}"
+                href="{{ route('posts.index') }}">
+                <i class="far fa-newspaper"></i>
+                <span>Posts</span></a>
+        </li>
+    @else
+        <!-- Nav Item - post -->
+        <li class="nav-item {{ request()->routeIs('approval-post.index') ? 'active' : '' }}">
+            <a class="nav-link {{ request()->routeIs('approval-post.index') ? 'active' : '' }}"
+                href="{{ route('approval-post.index') }}">
+                <i class="far fa-newspaper"></i>
+                <span>Approval Posts</span></a>
+        </li>
+    @endif
 
     <!-- Nav Item - Utilities Collapse Menu -->
     <li class="nav-item">
@@ -113,15 +141,6 @@
     <!-- Sidebar Toggler (Sidebar) -->
     <div class="text-center d-none d-md-inline">
         <button class="rounded-circle border-0" id="sidebarToggle"></button>
-    </div>
-
-    <!-- Sidebar Message -->
-    <div class="sidebar-card d-none d-lg-flex">
-        <img class="sidebar-card-illustration mb-2" src="img/undraw_rocket.svg" alt="...">
-        <p class="text-center mb-2"><strong>SB Admin Pro</strong> is packed with premium features, components,
-            and more!</p>
-        <a class="btn btn-success btn-sm" href="https://startbootstrap.com/theme/sb-admin-pro">Upgrade to
-            Pro!</a>
     </div>
 
 </ul>

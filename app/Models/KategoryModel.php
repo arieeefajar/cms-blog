@@ -14,4 +14,9 @@ class KategoryModel extends Model
     protected $fillable = [
         'name',
     ];
+
+    public function postKategory()
+    {
+        return $this->hasMany(PostKategoryModel::class, 'kategory_id', 'id');
+    }
 }

@@ -1,24 +1,24 @@
 @extends('layout.app')
-@section('title', 'Data Author')
+@section('title', 'Data Posts')
 @section('content')
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Data Author</h6>
+            <h6 class="m-0 font-weight-bold text-primary">Data Posts</h6>
         </div>
         <div class="card-body">
             <div class="table-responsive">
                 <a href="#" data-toggle="modal" data-target="#addModal" class="btn btn-primary btn-icon-split mb-3">
                     <span class="icon text-white-50"><i class="fas fa-plus"></i></span>
-                    <span class="text">Add Author</span>
+                    <span class="text">Add Post</span>
                 </a>
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead class="text-center">
                         <tr>
                             <th>No</th>
-                            <th>Fullname</th>
-                            <th>Username</th>
-                            <th>Email</th>
+                            <th>Title</th>
+                            <th>Kategory</th>
+                            <th>Description</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
@@ -26,25 +26,33 @@
                     <tfoot class="text-center">
                         <tr>
                             <th>No</th>
-                            <th>Fullname</th>
-                            <th>Username</th>
-                            <th>Email</th>
+                            <th>Name</th>
+                            <th>Kategory</th>
+                            <th>Description</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
                     </tfoot>
                     <tbody>
-                        @foreach ($author as $index => $item)
+                        @foreach ($post as $index => $item)
                             <tr class="text-center">
                                 <td>{{ $index + 1 }}</td>
-                                <td>{{ $item->fullname }}</td>
-                                <td>{{ $item->username }}</td>
-                                <td>{{ $item->email }}</td>
+                                <td>{{ $item->title }}</td>
                                 <td>
-                                    @if ($item->status == 'active')
-                                        <span class="badge badge-success">{{ $item->status }}</span>
+                                    <ul class="list-unstyled">
+                                        @foreach ($item->kategory as $kategoryPost)
+                                            <li>
+                                                {{ $kategoryPost->name }}
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </td>
+                                <td>{{ $item->description }}</td>
+                                <td>
+                                    @if ($item->status_published == 'active')
+                                        <span class="badge badge-success">{{ $item->status_published }}</span>
                                     @else
-                                        <span class="badge badge-danger">{{ $item->status }}</span>
+                                        <span class="badge badge-danger">{{ $item->status_published }}</span>
                                     @endif
                                 </td>
                                 <td>
@@ -71,40 +79,34 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Add Author</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Add Post</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('users.store') }}" method="POST" id="addForm">
+                    <form action="{{ route('posts.store') }}" method="POST" id="addForm">
                         @csrf
                         <div class="form-group">
-                            <label for="exampleFullName" class="form-label">Fullname</label>
-                            <input type="text" class="form-control form-control-user" id="addFullName"
-                                placeholder="Enter fullname" name="fullname" value="{{ old('fullname') }}" required>
+                            <label for="exampleTitle" class="form-label">Title</label>
+                            <input type="text" class="form-control form-control-user" id="addTitle"
+                                placeholder="Enter title" name="title" value="{{ old('title') }}" required>
                         </div>
                         <div class="form-group">
-                            <label for="exampleFullName" class="form-label">Username</label>
-                            <input type="text" class="form-control form-control-user" id="addUsername"
-                                placeholder="Enter username" name="username" value="{{ old('username') }}" required>
+                            <label for="exampleDescription" class="form-label">Description</label>
+                            <textarea class="form-control" id="addDescription" name="description" rows="3">{{ old('description') }}</textarea>
                         </div>
                         <div class="form-group">
-                            <label for="exampleFullName" class="form-label">Email</label>
-                            <input type="email" class="form-control form-control-user" id="addEmail"
-                                placeholder="Enter email" name="email" value="{{ old('email') }}" required>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-sm-6 mb-3 mb-sm-0">
-                                <label for="exampleFullName" class="form-label">Password</label>
-                                <input type="password" class="form-control form-control-user" id="addPassword"
-                                    placeholder="Enter password" name="password" required>
-                            </div>
-                            <div class="col-sm-6">
-                                <label for="exampleFullName" class="form-label">Repeat Password</label>
-                                <input type="password" class="form-control form-control-user" id="addRepeatPassword"
-                                    placeholder="Enter repeat password" name="repeatpassword" required>
-                            </div>
+                            <label for="exampleKategory" class="form-label">Select Kategory</label>
+                            <br>
+                            @foreach ($kategory as $item)
+                                <div class="form-check d-inline">
+                                    <input type="checkbox" class="form-check-input" id="addKategory_{{ $item->id }}"
+                                        name="kategory_id[]" value="{{ $item->id }}">
+                                    <label class="form-check-label"
+                                        for="addKategory_{{ $item->id }}">{{ $item->name }}</label>
+                                </div>
+                            @endforeach
                         </div>
                     </form>
                 </div>
@@ -122,7 +124,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Update Author</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Update Post</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
@@ -132,27 +134,34 @@
                         @csrf
                         @method('PUT')
                         <div class="form-group">
-                            <label for="exampleFullName" class="form-label">Fullname</label>
-                            <input type="text" class="form-control form-control-user" id="updateFullName"
-                                placeholder="Enter fullname" name="fullname" value="{{ old('fullname') }}" required>
+                            <label for="exampleTitle" class="form-label">Title</label>
+                            <input type="text" class="form-control form-control-user" id="addTitleUpdate"
+                                placeholder="Enter title" name="title" value="{{ old('title') }}" required>
                         </div>
                         <div class="form-group">
-                            <label for="exampleFullName" class="form-label">Username</label>
-                            <input type="text" class="form-control form-control-user" id="updateUsername"
-                                placeholder="Enter username" name="username" value="{{ old('username') }}" required>
+                            <label for="exampleDescription" class="form-label">Description</label>
+                            <textarea class="form-control" id="addDescriptionUpdate" name="description" rows="3">{{ old('description') }}</textarea>
                         </div>
                         <div class="form-group">
-                            <label for="exampleFullName" class="form-label">Email</label>
-                            <input type="email" class="form-control form-control-user" id="updateEmail"
-                                placeholder="Enter email" name="email" value="{{ old('email') }}" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="exampleStatus">Status</label>
-                            <select name="status" id="updateStatus" class="form-control">
+                            <label for="exampleStatus" class="form-label">Status</label>
+                            <select name="status_published" id="updateStatusPubished" class="form-control">
                                 <option value="" selected disabled>Select Status</option>
                                 <option value="active">Active</option>
                                 <option value="inactive">Inactive</option>
                             </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleKategory" class="form-label">Select Kategory</label>
+                            <br>
+                            @foreach ($kategory as $item)
+                                <div class="form-check d-inline">
+                                    <input type="checkbox" class="form-check-input"
+                                        id="addKategoryUpdate_{{ $item->id }}" name="kategory_id[]"
+                                        value="{{ $item->id }}">
+                                    <label class="form-check-label"
+                                        for="addKategoryUpdate_{{ $item->id }}">{{ $item->name }}</label>
+                                </div>
+                            @endforeach
                         </div>
                     </form>
                 </div>
@@ -170,7 +179,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Delete Author</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Delete Post</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
@@ -179,7 +188,7 @@
                     <form action="" method="POST" id="deleteForm">
                         @csrf
                         @method('DELETE')
-                        Are you sure you want to delete this author?
+                        Are you sure you want to delete this post?
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -207,18 +216,21 @@
     <script>
         //function update
         function updateData(data) {
+            console.log(data);
             const form = document.getElementById('updateForm');
-            form.action = "{{ route('users.update', ':id') }}".replace(':id', data.id);
-            form.querySelector('#updateFullName').value = data.fullname;
-            form.querySelector('#updateUsername').value = data.username;
-            form.querySelector('#updateEmail').value = data.email;
-            form.querySelector('#updateStatus').value = data.status;
+            form.action = "{{ route('posts.update', ':id') }}".replace(':id', data.id);
+            form.querySelector('#addTitleUpdate').value = data.title;
+            form.querySelector('#addDescriptionUpdate').value = data.description;
+            form.querySelector('#updateStatusPubished').value = data.status_published;
+
+            data.kategory.forEach((item) => {
+                form.querySelector('#addKategoryUpdate_' + item.id).checked = true;
+            });
         }
 
-        //function delete
         function deleteData(id) {
             const form = document.getElementById('deleteForm');
-            form.action = "{{ route('users.destroy', ':id') }}".replace(':id', id);
+            form.action = "{{ route('posts.destroy', ':id') }}".replace(':id', id);
         }
     </script>
 @endsection
