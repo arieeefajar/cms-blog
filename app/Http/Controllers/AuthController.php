@@ -36,22 +36,27 @@ class AuthController extends Controller
 
         $users = User::where('username', $request->username)->first();
 
-        if ($users->status == 'active') {
-            if ($users && Hash::check($request->password, $users->password)) {
-                Auth::login($users);
-                if ($users->role == 'admin') {
-                    toast('Login Berhasil', 'success')->position('top')->autoClose(3000);
-                    return redirect()->route('dashboard');
-                } elseif ($users->role == 'author') {
-                    toast('Login Berhasil', 'success')->position('top')->autoClose(3000);
-                    return redirect()->route('dashboard.author');
+        if ($users) {
+            if ($users->status == 'active') {
+                if ($users && Hash::check($request->password, $users->password)) {
+                    Auth::login($users);
+                    if ($users->role == 'admin') {
+                        toast('Login Berhasil', 'success')->position('top')->autoClose(3000);
+                        return redirect()->route('dashboard');
+                    } elseif ($users->role == 'author') {
+                        toast('Login Berhasil', 'success')->position('top')->autoClose(3000);
+                        return redirect()->route('dashboard.author');
+                    }
+                } else {
+                    toast('Username atau Password salah', 'error')->position('top')->autoClose(3000);
+                    return redirect()->back()->withInput();
                 }
             } else {
-                toast('Username atau Password salah', 'error')->position('top')->autoClose(3000);
+                toast('Akun anda tidak aktif', 'error')->position('top')->autoClose(3000);
                 return redirect()->back()->withInput();
             }
         } else {
-            toast('Akun anda tidak aktif', 'error')->position('top')->autoClose(3000);
+            toast('Username atau Password salah', 'error')->position('top')->autoClose(3000);
             return redirect()->back()->withInput();
         }
     }

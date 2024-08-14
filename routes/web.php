@@ -55,6 +55,9 @@ Route::middleware(['auth'])->group(function () {
 
         Route::prefix('post-data')->group(function () {
             Route::get('/', [AdminPostController::class, 'index'])->name('post-data.index');
+            Route::post('/', [AdminPostController::class, 'store'])->name('post-data.store');
+            Route::put('/{id}', [AdminPostController::class, 'update'])->name('post-data.update');
+            Route::delete('/{id}', [AdminPostController::class, 'destroy'])->name('post-data.destroy');
         });
 
         Route::prefix('approval-post')->group(function () {
