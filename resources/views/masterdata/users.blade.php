@@ -1,4 +1,5 @@
 @extends('layout.app')
+@section('title', 'Data Author')
 @section('content')
     <!-- DataTales Example -->
     <div class="card shadow mb-4">

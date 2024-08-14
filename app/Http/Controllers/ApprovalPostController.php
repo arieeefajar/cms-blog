@@ -16,6 +16,7 @@ class ApprovalPostController extends Controller
     public function approve($id)
     {
         $post = PostModel::find($id);
+        $post->status_published = 'active';
         $post->status = 'published';
 
         try {

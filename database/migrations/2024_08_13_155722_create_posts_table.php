@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('description');
+            $table->enum('status_published', ['active', 'inactive'])->default('inactive');
             $table->enum('status', ['published', 'pending', 'rejected'])->default('pending');
             $table->unsignedBigInteger('user_id');
             $table->timestamps();

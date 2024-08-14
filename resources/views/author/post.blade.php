@@ -1,4 +1,5 @@
 @extends('layout.app')
+@section('title', 'Data Posts')
 @section('content')
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
@@ -18,6 +19,7 @@
                             <th>Title</th>
                             <th>Kategory</th>
                             <th>Description</th>
+                            <th>Status</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -27,6 +29,7 @@
                             <th>Name</th>
                             <th>Kategory</th>
                             <th>Description</th>
+                            <th>Status</th>
                             <th>Action</th>
                         </tr>
                     </tfoot>
@@ -45,6 +48,13 @@
                                     </ul>
                                 </td>
                                 <td>{{ $item->description }}</td>
+                                <td>
+                                    @if ($item->status_published == 'active')
+                                        <span class="badge badge-success">{{ $item->status_published }}</span>
+                                    @else
+                                        <span class="badge badge-danger">{{ $item->status_published }}</span>
+                                    @endif
+                                </td>
                                 <td>
                                     <div class="justify-content-center">
                                         <a href="#" data-toggle="modal" data-target="#updateModal"
