@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Http\Controllers\Author;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\KategoryModel;
 use App\Models\PostKategoryModel;
 use App\Models\PostModel;
@@ -14,9 +13,9 @@ class PostController extends Controller
 {
     public function index()
     {
-        $post = PostModel::with('kategory')->where('user_id', Auth::user()->id)->orderBy('created_at', 'desc')->get();
+        $post = PostModel::with('users')->orderByRaw("CASE WHEN status = 'pending' THEN 0 ELSE 1 END")->orderBy('created_at', 'desc')->get();
         $kategory = KategoryModel::all();
-        return view('author.post', compact('post', 'kategory'));
+        return view('masterdata.post', compact('post', 'kategory'));
     }
 
     public function store(Request $request)
@@ -44,6 +43,8 @@ class PostController extends Controller
         $post = new PostModel();
         $post->title = $request->title;
         $post->description = $request->description;
+        $post->status_published = 'active';
+        $post->status = 'published';
         $post->user_id = Auth::user()->id;
 
         try {
@@ -54,11 +55,11 @@ class PostController extends Controller
                 $postKategory->kategory_id = $item;
                 $postKategory->save();
             }
-            alert()->success('Berhasil', 'Mengajukan Postingan');
+            alert()->success('Berhasil', 'Menambahkan Postingan');
             return redirect()->back();
         } catch (\Throwable $th) {
             //throw $th;
-            alert()->error('Gagal', 'Mengajukan Postingan');
+            alert()->error('Gagal', 'Menambahkan Postingan');
             return redirect()->back();
         }
     }
@@ -114,8 +115,14 @@ class PostController extends Controller
     {
         $post = PostModel::find($id);
         $post->kategory()->detach();
-        $post->delete();
-        alert()->success('Berhasil', 'Menghapus Postingan');
-        return redirect()->back();
+
+        try {
+            $post->delete();
+            alert()->success('Berhasil', 'Menghapus Postingan');
+            return redirect()->back();
+        } catch (\Throwable $th) {
+            alert()->error('Gagal', 'Menghapus Postingan');
+            return redirect()->back();
+        }
     }
 }

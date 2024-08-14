@@ -1,5 +1,5 @@
 @extends('layout.app')
-@section('title', 'Data Posts')
+@section('title', 'Data Post')
 @section('content')
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
@@ -71,6 +71,9 @@
                                         <a href="#" data-toggle="modal" data-target="#updateModal"
                                             class="btn btn-warning btn-sm" onclick="updateData({{ $item }})"><i
                                                 class="fas fa-edit"></i></a>
+                                        <a href="#" data-toggle="modal" data-target="#detailModal"
+                                            class="btn btn-info btn-sm" onclick="detailData({{ $item }})"><i
+                                                class="fas fa-info"></i></a>
                                         <a href="#" data-toggle="modal" data-target="#deleteModal"
                                             class="btn btn-danger btn-sm" onclick="deleteData({{ $item->id }})"><i
                                                 class="fas fa-trash"></i></a>
@@ -96,7 +99,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('posts.store') }}" method="POST" id="addForm">
+                    <form action="{{ route('post-data.store') }}" method="POST" id="addForm">
                         @csrf
                         <div class="form-group">
                             <label for="exampleTitle" class="form-label">Title</label>
@@ -184,6 +187,37 @@
         </div>
     </div>
 
+    <!-- detail Modal-->
+    <div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Detail Post</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="" method="POST" id="detailForm">
+                        @csrf
+                        <div class="form-group">
+                            <label for="exampleUsers" class="form-label">Created By</label>
+                            <input type="text" name="users" id="users" class="form-control" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleDescription" class="form-label">Date</label>
+                            <input type="date" name="date" id="date" class="form-control" readonly>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Delete Modal-->
     <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
@@ -229,7 +263,7 @@
         function updateData(data) {
             console.log(data);
             const form = document.getElementById('updateForm');
-            form.action = "{{ route('posts.update', ':id') }}".replace(':id', data.id);
+            form.action = "{{ route('post-data.update', ':id') }}".replace(':id', data.id);
             form.querySelector('#addTitleUpdate').value = data.title;
             form.querySelector('#addDescriptionUpdate').value = data.description;
             form.querySelector('#updateStatusPubished').value = data.status_published;
@@ -239,9 +273,25 @@
             });
         }
 
+        //function detail
+        function detailData(data) {
+            let date = new Date(data.updated_at);
+
+            // Format tanggal menjadi YYYY-MM-DD
+            let year = date.getFullYear();
+            let month = ('0' + (date.getMonth() + 1)).slice(-2);
+            let day = ('0' + date.getDate()).slice(-2);
+            let formattedDate = `${year}-${month}-${day}`;
+            const form = document.getElementById('detailForm');
+
+            form.querySelector('#users').value = data.users.fullname;
+            form.querySelector('#date').value = formattedDate
+        }
+
+        //function delete
         function deleteData(id) {
             const form = document.getElementById('deleteForm');
-            form.action = "{{ route('posts.destroy', ':id') }}".replace(':id', id);
+            form.action = "{{ route('post-data.destroy', ':id') }}".replace(':id', id);
         }
     </script>
 @endsection
