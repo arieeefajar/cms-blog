@@ -4,9 +4,9 @@ use App\Http\Controllers\ApprovalPostController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Author\PostController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\KategoryController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PostController as AdminPostController;
-use App\Http\Controllers\UsersController;
+use App\Http\Controllers\UserController;
 use Illuminate\Routing\RouteGroup;
 use Illuminate\Support\Facades\Route;
 
@@ -59,44 +59,45 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::middleware(['auth', 'admin'])->group(function () {
+
         Route::get('/dashboard', [DashboardController::class, 'admin'])->name('dashboard');
 
-        Route::prefix('users')->group(function () {
-            Route::get('/', [UsersController::class, 'index'])->name('users.index');
-            Route::post('/', [UsersController::class, 'store'])->name('users.store');
-            Route::put('/{id}', [UsersController::class, 'update'])->name('users.update');
-            Route::delete('/{id}', [UsersController::class, 'destroy'])->name('users.destroy');
+        Route::prefix('users')->controller(UserController::class)->name('users.')->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::post('/', 'store')->name('store');
+            Route::put('/{id}', 'update')->name('update');
+            Route::delete('/{id}', 'destroy')->name('destroy');
         });
 
-        Route::prefix('kategori')->group(function () {
-            Route::get('/', [KategoryController::class, 'index'])->name('kategory.index');
-            Route::post('/', [KategoryController::class, 'store'])->name('kategory.store');
-            Route::put('/{id}', [KategoryController::class, 'update'])->name('kategory.update');
-            Route::delete('/{id}', [KategoryController::class, 'destroy'])->name('kategory.destroy');
+        Route::prefix('categories')->controller(CategoryController::class)->name('categories.')->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::post('/', 'store')->name('store');
+            Route::put('/{id}', 'update')->name('update');
+            Route::delete('/{id}', 'destroy')->name('destroy');
         });
 
-        Route::prefix('post-data')->group(function () {
-            Route::get('/', [AdminPostController::class, 'index'])->name('post-data.index');
-            Route::post('/', [AdminPostController::class, 'store'])->name('post-data.store');
-            Route::put('/{id}', [AdminPostController::class, 'update'])->name('post-data.update');
-            Route::delete('/{id}', [AdminPostController::class, 'destroy'])->name('post-data.destroy');
+        Route::prefix('post-data')->controller(AdminPostController::class)->name('post-data.')->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::post('/', 'store')->name('store');
+            Route::put('/{id}', 'update')->name('update');
+            Route::delete('/{id}', 'destroy')->name('destroy');
         });
 
-        Route::prefix('approval-post')->group(function () {
-            Route::get('/', [ApprovalPostController::class, 'index'])->name('approval-post.index');
-            Route::put('/{id}', [ApprovalPostController::class, 'approve'])->name('approval-post.approve');
-            Route::put('/reject/{id}', [ApprovalPostController::class, 'reject'])->name('approval-post.reject');
+        Route::prefix('approval-post')->controller(ApprovalPostController::class)->name('approval-post.')->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::put('/{id}', 'approve')->name('approve');
+            Route::put('/reject/{id}', 'reject')->name('reject');
         });
     });
 
     Route::middleware(['auth', 'author'])->group(function () {
         Route::get('/dashboard-author', [DashboardController::class, 'author'])->name('dashboard.author');
 
-        Route::prefix('posts')->group(function () {
-            Route::get('/', [PostController::class, 'index'])->name('posts.index');
-            Route::post('/', [PostController::class, 'store'])->name('posts.store');
-            Route::put('/{id}', [PostController::class, 'update'])->name('posts.update');
-            Route::delete('/{id}', [PostController::class, 'destroy'])->name('posts.destroy');
+        Route::prefix('posts')->controller(PostController::class)->name('posts.')->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::post('/', 'store')->name('store');
+            Route::put('/{id}', 'update')->name('update');
+            Route::delete('/{id}', 'destroy')->name('destroy');
         });
     });
 });

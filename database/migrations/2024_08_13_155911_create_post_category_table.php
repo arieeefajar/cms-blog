@@ -11,16 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('post_kategory', function (Blueprint $table) {
+        Schema::create('post_category', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('post_id');
-            $table->unsignedBigInteger('kategory_id');
+            $table->unsignedBigInteger('category_id');
             $table->timestamps();
         });
 
-        Schema::table('post_kategory', function (Blueprint $table) {
+        Schema::table('post_category', function (Blueprint $table) {
             $table->foreign('post_id')->references('id')->on('posts');
-            $table->foreign('kategory_id')->references('id')->on('kategory');
+            $table->foreign('category_id')->references('id')->on('category');
         });
     }
 

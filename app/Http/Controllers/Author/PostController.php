@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Author;
 
 use App\Http\Controllers\Controller;
-use App\Models\KategoryModel;
-use App\Models\PostKategoryModel;
-use App\Models\PostModel;
+use App\Models\Category;
+use App\Models\Post;
+use App\Models\PostCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -14,9 +14,9 @@ class PostController extends Controller
 {
     public function index()
     {
-        $post = PostModel::with('kategory')->where('user_id', Auth::user()->id)->orderBy('created_at', 'desc')->get();
-        $kategory = KategoryModel::all();
-        return view('author.post', compact('post', 'kategory'));
+        $posts = Post::with('categories')->where('user_id', Auth::user()->id)->orderBy('created_at', 'desc')->get();
+        $categories = Category::all();
+        return view('author.post', compact('posts', 'categories'));
     }
 
     public function store(Request $request)
@@ -27,13 +27,13 @@ class PostController extends Controller
 
             'description.required' => 'Deskripsi harus diisi',
 
-            'kategory_id.required' => 'Harap pilih kategori',
+            'category_id.required' => 'Harap pilih kategori',
         ];
 
         $validator = Validator::make($request->all(), [
             'title' => 'required|max:25',
             'description' => 'required',
-            'kategory_id' => 'required',
+            'category_id' => 'required',
         ], $customMessage);
 
         if ($validator->fails()) {
@@ -41,23 +41,24 @@ class PostController extends Controller
             return redirect()->back()->withInput();
         }
 
-        $post = new PostModel();
+        $post = new Post();
         $post->title = $request->title;
         $post->description = $request->description;
         $post->user_id = Auth::user()->id;
 
         try {
             $post->save();
-            foreach ($request->kategory_id as $item) {
-                $postKategory = new PostKategoryModel();
+            foreach ($request->category_id as $item) {
+                $postKategory = new PostCategory();
                 $postKategory->post_id = $post->id;
-                $postKategory->kategory_id = $item;
+                $postKategory->category_id = $item;
                 $postKategory->save();
             }
             alert()->success('Berhasil', 'Mengajukan Postingan');
             return redirect()->back();
         } catch (\Throwable $th) {
             //throw $th;
+            return $th->getMessage();
             alert()->error('Gagal', 'Mengajukan Postingan');
             return redirect()->back();
         }
@@ -71,13 +72,13 @@ class PostController extends Controller
 
             'description.required' => 'Deskripsi harus diisi',
 
-            'kategory_id.required' => 'Harap pilih kategori',
+            'category_id.required' => 'Harap pilih kategori',
         ];
 
         $validator = Validator::make($request->all(), [
             'title' => 'required|max:25',
             'description' => 'required',
-            'kategory_id' => 'required',
+            'category_id' => 'required',
         ], $customMessage);
 
         if ($validator->fails()) {
@@ -85,21 +86,21 @@ class PostController extends Controller
             return redirect()->back()->withInput();
         }
 
-        $post = PostModel::find($id);
+        $post = Post::find($id);
         $post->title = $request->title;
         $post->description = $request->description;
         $post->status_published = $request->status_published;
         $post->user_id = Auth::user()->id;
 
-        $post->kategory()->detach();
+        $post->categories()->detach();
 
         try {
             $post->save();
-            foreach ($request->kategory_id as $item) {
-                $postKategory = new PostKategoryModel();
-                $postKategory->post_id = $post->id;
-                $postKategory->kategory_id = $item;
-                $postKategory->save();
+            foreach ($request->category_id as $item) {
+                $postCategory = new PostCategory();
+                $postCategory->post_id = $post->id;
+                $postCategory->category_id = $item;
+                $postCategory->save();
             }
             alert()->success('Berhasil', 'Mengubah Postingan');
             return redirect()->back();
@@ -112,8 +113,8 @@ class PostController extends Controller
 
     public function destroy($id)
     {
-        $post = PostModel::find($id);
-        $post->kategory()->detach();
+        $post = Post::find($id);
+        $post->categories()->detach();
         $post->delete();
         alert()->success('Berhasil', 'Menghapus Postingan');
         return redirect()->back();

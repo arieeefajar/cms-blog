@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\KategoryModel;
-use App\Models\PostModel;
+use App\Models\Category;
+use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,18 +13,18 @@ class DashboardController extends Controller
 {
     public function admin()
     {
-        $countPost = PostModel::where('status', 'publish')->count();
+        $countPost = Post::where('status', 'publish')->count();
         $countAuthor = User::where('role', 'author')->count();
-        $countKategory = KategoryModel::count();
-        $countPostPending = PostModel::where('status', 'pending')->count();
+        $countKategory = Category::count();
+        $countPostPending = Post::where('status', 'pending')->count();
         return view('dashboard.admin', compact('countPost', 'countAuthor', 'countKategory', 'countPostPending'));
     }
 
     public function author()
     {
-        $countPost = PostModel::where('user_id', Auth::user()->id)->where('status', 'publish')->count();
-        $countPostPending = PostModel::where('user_id', Auth::user()->id)->where('status', 'pending')->count();
-        $countPostReject = PostModel::where('user_id', Auth::user()->id)->where('status', 'reject')->count();
+        $countPost = Post::where('user_id', Auth::user()->id)->where('status', 'publish')->count();
+        $countPostPending = Post::where('user_id', Auth::user()->id)->where('status', 'pending')->count();
+        $countPostReject = Post::where('user_id', Auth::user()->id)->where('status', 'reject')->count();
         return view('dashboard.author', compact('countPost', 'countPostPending', 'countPostReject'));
     }
 }
