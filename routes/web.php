@@ -76,11 +76,11 @@ Route::middleware(['auth'])->group(function () {
             Route::delete('/{id}', 'destroy')->name('destroy');
         });
 
-        Route::prefix('post-data')->group(function () {
-            Route::get('/', [AdminPostController::class, 'index'])->name('post-data.index');
-            Route::post('/', [AdminPostController::class, 'store'])->name('post-data.store');
-            Route::put('/{id}', [AdminPostController::class, 'update'])->name('post-data.update');
-            Route::delete('/{id}', [AdminPostController::class, 'destroy'])->name('post-data.destroy');
+        Route::prefix('post-data')->controller(AdminPostController::class)->name('post-data.')->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::post('/', 'store')->name('store');
+            Route::put('/{id}', 'update')->name('update');
+            Route::delete('/{id}', 'destroy')->name('destroy');
         });
 
         Route::prefix('approval-post')->group(function () {
@@ -98,11 +98,6 @@ Route::middleware(['auth'])->group(function () {
             Route::post('/', 'store')->name('store');
             Route::put('/{id}', 'update')->name('update');
             Route::delete('/{id}', 'destroy')->name('destroy');
-
-            // Route::get('/', [PostController::class, 'index'])->name('posts.index');
-            // Route::post('/', [PostController::class, 'store'])->name('posts.store');
-            // Route::put('/{id}', [PostController::class, 'update'])->name('posts.update');
-            // Route::delete('/{id}', [PostController::class, 'destroy'])->name('posts.destroy');
         });
     });
 });

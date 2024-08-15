@@ -93,7 +93,7 @@ class PostController extends Controller
         $post->status_published = $request->status_published;
         $post->user_id = Auth::user()->id;
 
-        $post->kategory()->detach();
+        $post->categories()->detach();
 
         try {
             $post->save();
@@ -115,7 +115,7 @@ class PostController extends Controller
     public function destroy($id)
     {
         $post = Post::find($id);
-        $post->kategory()->detach();
+        $post->categories()->detach();
 
         try {
             $post->delete();

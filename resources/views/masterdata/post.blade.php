@@ -275,7 +275,7 @@
 
             form.querySelector('#updateStatusPubished').value = data.status_published;
 
-            data.kategory.forEach((item) => {
+            data.categories.forEach((item) => {
                 form.querySelector('#addKategoryUpdate_' + item.id).checked = true;
             });
         }
