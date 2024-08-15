@@ -6,7 +6,7 @@ use App\Http\Controllers\Author\PostController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KategoryController;
 use App\Http\Controllers\PostController as AdminPostController;
-use App\Http\Controllers\UsersController;
+use App\Http\Controllers\UserController;
 use Illuminate\Routing\RouteGroup;
 use Illuminate\Support\Facades\Route;
 
@@ -59,13 +59,14 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::middleware(['auth', 'admin'])->group(function () {
+
         Route::get('/dashboard', [DashboardController::class, 'admin'])->name('dashboard');
 
-        Route::prefix('users')->group(function () {
-            Route::get('/', [UsersController::class, 'index'])->name('users.index');
-            Route::post('/', [UsersController::class, 'store'])->name('users.store');
-            Route::put('/{id}', [UsersController::class, 'update'])->name('users.update');
-            Route::delete('/{id}', [UsersController::class, 'destroy'])->name('users.destroy');
+        Route::prefix('users')->controller(UserController::class)->name('users.')->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::post('/', 'store')->name('store');
+            Route::put('/{id}', 'update')->name('update');
+            Route::delete('/{id}', 'destroy')->name('destroy');
         });
 
         Route::prefix('kategori')->group(function () {
