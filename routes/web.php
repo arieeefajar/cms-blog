@@ -4,7 +4,7 @@ use App\Http\Controllers\ApprovalPostController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Author\PostController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\KategoryController;
+use App\Http\Controllers\categoryController;
 use App\Http\Controllers\PostController as AdminPostController;
 use App\Http\Controllers\UserController;
 use Illuminate\Routing\RouteGroup;
@@ -69,11 +69,11 @@ Route::middleware(['auth'])->group(function () {
             Route::delete('/{id}', 'destroy')->name('destroy');
         });
 
-        Route::prefix('kategori')->group(function () {
-            Route::get('/', [KategoryController::class, 'index'])->name('kategory.index');
-            Route::post('/', [KategoryController::class, 'store'])->name('kategory.store');
-            Route::put('/{id}', [KategoryController::class, 'update'])->name('kategory.update');
-            Route::delete('/{id}', [KategoryController::class, 'destroy'])->name('kategory.destroy');
+        Route::prefix('categories')->controller(categoryController::class)->name('categories.')->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::post('/', 'store')->name('store');
+            Route::put('/{id}', 'update')->name('update');
+            Route::delete('/{id}', 'destroy')->name('destroy');
         });
 
         Route::prefix('post-data')->group(function () {

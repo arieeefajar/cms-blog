@@ -1,36 +1,36 @@
 @extends('layout.app')
-@section('title', 'Data Kategory')
+@section('title', 'Data Categories')
 @section('content')
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Data Kategory</h6>
+            <h6 class="m-0 font-weight-bold text-primary">Data Categories</h6>
         </div>
         <div class="card-body">
             <div class="table-responsive">
                 <a href="#" data-toggle="modal" data-target="#addModal" class="btn btn-primary btn-icon-split mb-3">
                     <span class="icon text-white-50"><i class="fas fa-plus"></i></span>
-                    <span class="text">Add Kategory</span>
+                    <span class="text">Add Category</span>
                 </a>
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead class="text-center">
                         <tr>
                             <th>No</th>
                             <th>Name</th>
-                            <th>Position</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                     <tfoot class="text-center">
                         <tr>
                             <th>No</th>
                             <th>Name</th>
-                            <th>Position</th>
+                            <th>Action</th>
                         </tr>
                     </tfoot>
                     <tbody>
-                        @foreach ($kategory as $index => $item)
+                        @foreach ($categories as $item)
                             <tr class="text-center">
-                                <td>{{ $index + 1 }}</td>
+                                <td>{{ $loop->iteration }}</td>
                                 <td class="text-capitalize">{{ $item->name }}</td>
                                 <td>
                                     <div class="justify-content-center">
@@ -58,13 +58,13 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Add Kategory</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Add Category</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('kategory.store') }}" method="POST" id="addForm">
+                    <form action="{{ route('categories.store') }}" method="POST" id="addForm">
                         @csrf
                         <div class="form-group">
                             <label for="exampleName" class="form-label">Name</label>
@@ -87,7 +87,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Update Kategory</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Update Category</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
@@ -117,7 +117,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Delete Kategory</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Delete Category</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
@@ -126,7 +126,7 @@
                     <form action="" method="POST" id="deleteForm">
                         @csrf
                         @method('DELETE')
-                        Are you sure you want to delete this kategory?
+                        Are you sure you want to delete this Category?
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -155,14 +155,14 @@
         //function update
         function updateData(data) {
             const form = document.getElementById('updateForm');
-            form.action = "{{ route('kategory.update', ':id') }}".replace(':id', data.id);
+            form.action = "{{ route('categories.update', ':id') }}".replace(':id', data.id);
             form.querySelector('#updateName').value = data.name;
         }
 
         //function delete
         function deleteData(id) {
             const form = document.getElementById('deleteForm');
-            form.action = "{{ route('kategory.destroy', ':id') }}".replace(':id', id);
+            form.action = "{{ route('categories.destroy', ':id') }}".replace(':id', id);
         }
     </script>
 @endsection

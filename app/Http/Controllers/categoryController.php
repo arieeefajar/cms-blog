@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\KategoryModel;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class KategoryController extends Controller
+class categoryController extends Controller
 {
     public function index()
     {
-        $kategory = KategoryModel::orderBy('created_at', 'desc')->get();
-        return view('masterdata.kategori', compact('kategory'));
+        $categories = Category::orderBy('created_at', 'desc')->get();
+        return view('masterdata.category', compact('categories'));
     }
 
     public function store(Request $request)
@@ -29,11 +29,11 @@ class KategoryController extends Controller
             return redirect()->back()->withInput();
         }
 
-        $kategory = new KategoryModel();
-        $kategory->name = $request->name;
+        $category = new Category();
+        $category->name = $request->name;
 
         try {
-            $kategory->save();
+            $category->save();
             alert()->success('Berhasil', 'Menambahkan Kategori');
             return redirect()->back();
         } catch (\Throwable $th) {
@@ -57,11 +57,11 @@ class KategoryController extends Controller
             return redirect()->back()->withInput();
         }
 
-        $kategory = KategoryModel::find($id);
-        $kategory->name = $request->name;
+        $category = Category::find($id);
+        $category->name = $request->name;
 
         try {
-            $kategory->save();
+            $category->save();
             alert()->success('Berhasil', 'Mengubah Kategori');
             return redirect()->back();
         } catch (\Throwable $th) {
@@ -72,10 +72,10 @@ class KategoryController extends Controller
 
     public function destroy($id)
     {
-        $kategory = KategoryModel::find($id);
+        $category = Category::find($id);
 
         try {
-            $kategory->delete();
+            $category->delete();
             alert()->success('Berhasil', 'Menghapus Kategori');
             return redirect()->back();
         } catch (\Throwable $th) {

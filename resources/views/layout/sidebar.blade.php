@@ -51,9 +51,9 @@
                     <a class="collapse-item {{ request()->routeIs('users.*') ? 'active' : '' }}"
                         href="{{ route('users.index') }}">Author</a>
                     <a class="collapse-item {{ request()->routeIs('kategory.*') ? 'active' : '' }}"
-                        href="{{ route('kategory.index') }}">Kategory</a>
+                        href="{{ route('categories.index') }}">Category</a>
                     <a class="collapse-item {{ request()->routeIs('post-data.*') ? 'active' : '' }}"
-                        href="{{ route('post-data.index') }}">Posts</a>
+                        href="{{ route('post-data.index') }}">Post</a>
                 </div>
             </div>
         </li>

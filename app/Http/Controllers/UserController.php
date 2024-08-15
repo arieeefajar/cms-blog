@@ -53,15 +53,15 @@ class UserController extends Controller
         }
 
         if ($request->password == $request->repeatpassword) {
-            $users = new User();
-            $users->fullname = $request->fullname;
-            $users->username = $request->username;
-            $users->email = $request->email;
-            $users->password = Hash::make($request->password);
-            $users->status = 'active';
+            $user = new User();
+            $user->fullname = $request->fullname;
+            $user->username = $request->username;
+            $user->email = $request->email;
+            $user->password = Hash::make($request->password);
+            $user->status = 'active';
 
             try {
-                $users->save();
+                $user->save();
                 alert()->success('Berhasil', 'Menambahkan Akun Baru');
                 return redirect()->back();
             } catch (\Throwable $th) {
@@ -105,23 +105,23 @@ class UserController extends Controller
             return redirect()->back()->withInput();
         }
 
-        $users = User::find($id);
+        $user = User::find($id);
         $email = User::where('email', $request->email)->first();
 
         if ($email) {
-            if ($email->id != $users->id) {
+            if ($email->id != $user->id) {
                 alert()->error('Gagal', 'Email sudah terdaftar, silahkan gunakan email lain');
                 return redirect()->back()->withInput();
             }
         }
 
-        $users->fullname = $request->fullname;
-        $users->username = $request->username;
-        $users->email = $request->email;
-        $users->status = $request->status;
+        $user->fullname = $request->fullname;
+        $user->username = $request->username;
+        $user->email = $request->email;
+        $user->status = $request->status;
 
         try {
-            $users->save();
+            $user->save();
             alert()->success('Berhasil', 'Mengubah Data Akun');
             return redirect()->back();
         } catch (\Throwable $th) {
@@ -133,10 +133,10 @@ class UserController extends Controller
 
     public function destroy($id)
     {
-        $users = User::find($id);
+        $user = User::find($id);
 
         try {
-            $users->delete();
+            $user->delete();
             alert()->success('Berhasil', 'Menghapus Akun');
             return redirect()->back();
         } catch (\Throwable $th) {
