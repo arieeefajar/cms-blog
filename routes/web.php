@@ -93,11 +93,16 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['auth', 'author'])->group(function () {
         Route::get('/dashboard-author', [DashboardController::class, 'author'])->name('dashboard.author');
 
-        Route::prefix('posts')->group(function () {
-            Route::get('/', [PostController::class, 'index'])->name('posts.index');
-            Route::post('/', [PostController::class, 'store'])->name('posts.store');
-            Route::put('/{id}', [PostController::class, 'update'])->name('posts.update');
-            Route::delete('/{id}', [PostController::class, 'destroy'])->name('posts.destroy');
+        Route::prefix('posts')->controller(PostController::class)->name('posts.')->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::post('/', 'store')->name('store');
+            Route::put('/{id}', 'update')->name('update');
+            Route::delete('/{id}', 'destroy')->name('destroy');
+
+            // Route::get('/', [PostController::class, 'index'])->name('posts.index');
+            // Route::post('/', [PostController::class, 'store'])->name('posts.store');
+            // Route::put('/{id}', [PostController::class, 'update'])->name('posts.update');
+            // Route::delete('/{id}', [PostController::class, 'destroy'])->name('posts.destroy');
         });
     });
 });

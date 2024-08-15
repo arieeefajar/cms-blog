@@ -36,15 +36,15 @@
                         </tr>
                     </tfoot>
                     <tbody>
-                        @foreach ($post as $index => $item)
+                        @foreach ($posts as $item)
                             <tr class="text-center">
-                                <td>{{ $index + 1 }}</td>
+                                <td>{{ $loop->iteration }}</td>
                                 <td>{{ $item->title }}</td>
                                 <td>
                                     <ul class="list-unstyled">
-                                        @foreach ($item->kategory as $kategoryPost)
+                                        @foreach ($item->categories as $categoryPost)
                                             <li>
-                                                {{ $kategoryPost->name }}
+                                                {{ $categoryPost->name }}
                                             </li>
                                         @endforeach
                                     </ul>
@@ -110,7 +110,7 @@
                         <div class="form-group">
                             <label for="exampleKategory" class="form-label">Select Kategory</label>
                             <br>
-                            @foreach ($kategory as $item)
+                            @foreach ($categories as $item)
                                 <div class="form-check d-inline">
                                     <input type="checkbox" class="form-check-input" id="addKategory_{{ $item->id }}"
                                         name="category_id[]" value="{{ $item->id }}">
@@ -164,7 +164,7 @@
                         <div class="form-group">
                             <label for="exampleKategory" class="form-label">Select Kategory</label>
                             <br>
-                            @foreach ($kategory as $item)
+                            @foreach ($categories as $item)
                                 <div class="form-check d-inline">
                                     <input type="checkbox" class="form-check-input"
                                         id="addKategoryUpdate_{{ $item->id }}" name="category_id[]"
@@ -241,7 +241,7 @@
             form.querySelector('#updateStatusPubished').value = data.status_published;
 
 
-            data.kategory.forEach((item) => {
+            data.categories.forEach((item) => {
                 form.querySelector('#addKategoryUpdate_' + item.id).checked = true;
             });
         }
