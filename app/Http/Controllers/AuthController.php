@@ -23,7 +23,6 @@ class AuthController extends Controller
 
     public function loginProcess(Request $request)
     {
-        // return $request->all();
         $customMessage = [
             'required' => ':attribute harus diisi',
         ];
@@ -38,16 +37,16 @@ class AuthController extends Controller
             return redirect()->back()->withInput();
         }
 
-        $users = User::where('username', $request->username)->first();
+        $user = User::where('username', $request->username)->first();
 
-        if ($users) {
-            if ($users->status == 'active') {
-                if ($users && Hash::check($request->password, $users->password)) {
-                    Auth::login($users);
-                    if ($users->role == 'admin') {
+        if ($user) {
+            if ($user->status == 'active') {
+                if ($user && Hash::check($request->password, $user->password)) {
+                    Auth::login($user);
+                    if ($user->role == 'admin') {
                         toast('Login Berhasil', 'success')->position('top')->autoClose(3000);
                         return redirect()->route('dashboard');
-                    } elseif ($users->role == 'author') {
+                    } elseif ($user->role == 'author') {
                         toast('Login Berhasil', 'success')->position('top')->autoClose(3000);
                         return redirect()->route('dashboard.author');
                     }
@@ -109,15 +108,15 @@ class AuthController extends Controller
         }
 
         if ($request->password == $request->repeatpassword) {
-            $users = new User();
-            $users->fullname = $request->fullname;
-            $users->username = $request->username;
-            $users->email = $request->email;
-            $users->password = Hash::make($request->password);
-            $users->status = 'active';
+            $user = new User();
+            $user->fullname = $request->fullname;
+            $user->username = $request->username;
+            $user->email = $request->email;
+            $user->password = Hash::make($request->password);
+            $user->status = 'active';
 
             try {
-                $users->save();
+                $user->save();
                 alert()->success('Berhasil', 'Register Akun, Silahkan Login Untuk Melanjutkan');
                 return redirect()->route('login.index');
             } catch (\Throwable $th) {
@@ -264,10 +263,10 @@ class AuthController extends Controller
             return redirect()->back()->withInput();
         }
 
-        $users = User::where('id', Auth::user()->id)->first();
+        $user = User::where('id', Auth::user()->id)->first();
 
         if ($request->oldpassword) {
-            if (Hash::check($request->oldpassword, $users->password)) {
+            if (Hash::check($request->oldpassword, $user->password)) {
 
                 $customMessagePassword = [
                     'password.required' => 'Password Baru harus diisi',
@@ -290,13 +289,13 @@ class AuthController extends Controller
                 }
 
                 if ($request->password == $request->repeatpassword) {
-                    $users->fullname = $request->fullname;
-                    $users->username = $request->username;
-                    $users->email = $request->email;
-                    $users->password = Hash::make($request->password);
+                    $user->fullname = $request->fullname;
+                    $user->username = $request->username;
+                    $user->email = $request->email;
+                    $user->password = Hash::make($request->password);
 
                     try {
-                        $users->save();
+                        $user->save();
                         alert()->success('Berhasil', 'Update Profile');
                         return redirect()->back();
                     } catch (\Throwable $th) {
@@ -312,12 +311,12 @@ class AuthController extends Controller
                 return redirect()->back()->withInput();
             }
         } else {
-            $users->fullname = $request->fullname;
-            $users->username = $request->username;
-            $users->email = $request->email;
+            $user->fullname = $request->fullname;
+            $user->username = $request->username;
+            $user->email = $request->email;
 
             try {
-                $users->save();
+                $user->save();
                 alert()->success('Berhasil', 'Update Profile');
                 return redirect()->back();
             } catch (\Throwable $th) {
