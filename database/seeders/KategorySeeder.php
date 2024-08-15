@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\KategoryModel;
+use App\Models\Category;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -14,11 +14,11 @@ class KategorySeeder extends Seeder
     public function run(): void
     {
 
-        KategoryModel::create([
+        Category::create([
             'name' => 'Artikel',
         ]);
 
-        KategoryModel::create([
+        Category::create([
             'name' => 'Berita',
         ]);
     }
