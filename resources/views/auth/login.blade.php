@@ -41,7 +41,7 @@
                                         <h1 class="h4 text-gray-900">Welcome Back!</h1>
                                         <p class="text-gray-600">Silahkan Login Untuk Melanjutkan</p>
                                     </div>
-                                    <form class="user" method="POST" action="{{ route('prosesLogin') }}">
+                                    <form class="user" method="POST" action="{{ route('login.process') }}">
                                         @csrf
                                         <div class="form-group">
                                             <input type="username" class="form-control form-control-user"
@@ -60,10 +60,11 @@
                                     </form>
                                     <hr>
                                     <div class="text-center">
-                                        <a class="small" href="{{ route('forgotPassword') }}">Forgot Password?</a>
+                                        <a class="small" href="{{ route('forgot_password.index') }}">Forgot
+                                            Password?</a>
                                     </div>
                                     <div class="text-center">
-                                        <a class="small" href="{{ route('register') }}">Create an Account!</a>
+                                        <a class="small" href="{{ route('register.index') }}">Create an Account!</a>
                                     </div>
                                 </div>
                             </div>

@@ -18,12 +18,11 @@ class AuthController extends Controller
 {
     public function index()
     {
-        return view('auth/login');
+        return view('auth.login');
     }
 
-    public function prosesLogin(Request $request)
+    public function loginProcess(Request $request)
     {
-        // return $request->all();
         $customMessage = [
             'required' => ':attribute harus diisi',
         ];
@@ -38,16 +37,16 @@ class AuthController extends Controller
             return redirect()->back()->withInput();
         }
 
-        $users = User::where('username', $request->username)->first();
+        $user = User::where('username', $request->username)->first();
 
-        if ($users) {
-            if ($users->status == 'active') {
-                if ($users && Hash::check($request->password, $users->password)) {
-                    Auth::login($users);
-                    if ($users->role == 'admin') {
+        if ($user) {
+            if ($user->status == 'active') {
+                if ($user && Hash::check($request->password, $user->password)) {
+                    Auth::login($user);
+                    if ($user->role == 'admin') {
                         toast('Login Berhasil', 'success')->position('top')->autoClose(3000);
                         return redirect()->route('dashboard');
-                    } elseif ($users->role == 'author') {
+                    } elseif ($user->role == 'author') {
                         toast('Login Berhasil', 'success')->position('top')->autoClose(3000);
                         return redirect()->route('dashboard.author');
                     }
@@ -70,7 +69,7 @@ class AuthController extends Controller
         return view('auth/register');
     }
 
-    public function prosesRegister(Request $request)
+    public function registerProcess(Request $request)
     {
         // return $request->all();
         $customMessage = [
@@ -109,17 +108,17 @@ class AuthController extends Controller
         }
 
         if ($request->password == $request->repeatpassword) {
-            $users = new User();
-            $users->fullname = $request->fullname;
-            $users->username = $request->username;
-            $users->email = $request->email;
-            $users->password = Hash::make($request->password);
-            $users->status = 'active';
+            $user = new User();
+            $user->fullname = $request->fullname;
+            $user->username = $request->username;
+            $user->email = $request->email;
+            $user->password = Hash::make($request->password);
+            $user->status = 'active';
 
             try {
-                $users->save();
+                $user->save();
                 alert()->success('Berhasil', 'Register Akun, Silahkan Login Untuk Melanjutkan');
-                return redirect()->route('login');
+                return redirect()->route('login.index');
             } catch (\Throwable $th) {
                 alert()->error('Gagal', 'Register Akun');
                 return redirect()->back()->withInput();
@@ -134,15 +133,15 @@ class AuthController extends Controller
     {
         Auth::logout();
         toast('Logout Berhasil', 'success')->position('top')->autoClose(3000);
-        return redirect()->route('login');
+        return redirect()->route('login.index');
     }
 
     public function forgotPassword()
     {
-        return view('auth.forgotPassword');
+        return view('auth.forgot-password');
     }
 
-    public function resetPassword(Request $request)
+    public function forgotPasswordProcess(Request $request)
     {
         $customMessage = [
             'email.required' => 'Email harus diisi',
@@ -178,19 +177,19 @@ class AuthController extends Controller
         return redirect()->back();
     }
 
-    public function validasiForgotPassword(Request $request, $token)
+    public function validationForgotPassword(Request $request, $token)
     {
         $getToken = PasswordResetTokenModel::where('token', $token)->first();
 
         if (!$getToken) {
             toast('Token Tidak Valid', 'error')->position('top')->autoClose(3000);
-            return redirect()->route('login');
+            return redirect()->route('login.index');
         }
 
-        return view('auth.validasi-token', compact('token'));
+        return view('auth.validation-token', compact('token'));
     }
 
-    public function prosesValidasiForgotPassword(Request $request)
+    public function validationForgotPasswordProcess(Request $request)
     {
         $customMessage = [
             'password.required' => 'Password harus diisi',
@@ -211,10 +210,8 @@ class AuthController extends Controller
 
         if (!$token) {
             toast('Token Tidak Valid', 'error')->position('top')->autoClose(3000);
-            return redirect()->route('login');
+            return redirect()->route('login.index');
         }
-
-        // return $request->all();
 
         if ($request->password == $request->repeatPassword) {
             $user = User::where('email', $token->email)->first();
@@ -224,10 +221,10 @@ class AuthController extends Controller
                 $user->save();
                 $token->delete();
                 toast('Password Berhasil diubah', 'success')->position('top')->autoClose(3000);
-                return redirect()->route('login');
+                return redirect()->route('login.index');
             } catch (\Throwable $th) {
                 toast('Password Gagal diubah', 'error')->position('top')->autoClose(3000);
-                return redirect()->route('login');
+                return redirect()->route('login.index');
             }
         } else {
             toast('Konfirmasi Password Tidak Sama', 'error')->position('top')->autoClose(3000);
@@ -266,10 +263,10 @@ class AuthController extends Controller
             return redirect()->back()->withInput();
         }
 
-        $users = User::where('id', Auth::user()->id)->first();
+        $user = User::where('id', Auth::user()->id)->first();
 
         if ($request->oldpassword) {
-            if (Hash::check($request->oldpassword, $users->password)) {
+            if (Hash::check($request->oldpassword, $user->password)) {
 
                 $customMessagePassword = [
                     'password.required' => 'Password Baru harus diisi',
@@ -292,13 +289,13 @@ class AuthController extends Controller
                 }
 
                 if ($request->password == $request->repeatpassword) {
-                    $users->fullname = $request->fullname;
-                    $users->username = $request->username;
-                    $users->email = $request->email;
-                    $users->password = Hash::make($request->password);
+                    $user->fullname = $request->fullname;
+                    $user->username = $request->username;
+                    $user->email = $request->email;
+                    $user->password = Hash::make($request->password);
 
                     try {
-                        $users->save();
+                        $user->save();
                         alert()->success('Berhasil', 'Update Profile');
                         return redirect()->back();
                     } catch (\Throwable $th) {
@@ -314,12 +311,12 @@ class AuthController extends Controller
                 return redirect()->back()->withInput();
             }
         } else {
-            $users->fullname = $request->fullname;
-            $users->username = $request->username;
-            $users->email = $request->email;
+            $user->fullname = $request->fullname;
+            $user->username = $request->username;
+            $user->email = $request->email;
 
             try {
-                $users->save();
+                $user->save();
                 alert()->success('Berhasil', 'Update Profile');
                 return redirect()->back();
             } catch (\Throwable $th) {

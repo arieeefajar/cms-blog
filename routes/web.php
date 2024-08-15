@@ -26,23 +26,37 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Route::middleware(['guest'])->group(function () {
-    Route::get('/', [AuthController::class, 'index'])->name('login');
-    Route::post('/login', [AuthController::class, 'prosesLogin'])->name('prosesLogin');
 
-    Route::get('/register', [AuthController::class, 'register'])->name('register');
-    Route::post('/proses-register', [AuthController::class, 'prosesRegister'])->name('prosesRegister');
+    Route::controller(AuthController::class)->group(function () {
+        Route::name('login.')->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::post('/', 'loginProcess')->name('process');
+        });
 
-    Route::get('/forgot-password', [AuthController::class, 'forgotPassword'])->name('forgotPassword');
-    Route::post('/forgot-password', [AuthController::class, 'resetPassword'])->name('resetPassword');
+        Route::name('register.')->group(function () {
+            Route::get('/register', 'register')->name('index');
+            Route::post('/register-process', 'registerProcess')->name('process');
+        });
 
-    Route::get('/validasi-forgot-password/{token}', [AuthController::class, 'validasiForgotPassword'])->name('validasiForgotPassword');
-    Route::post('/proses-validasi-forgot-password', [AuthController::class, 'prosesValidasiForgotPassword'])->name('prosesValidasiForgotPassword');
+        Route::name('forgot_password.')->group(function () {
+            Route::get('/forgot-password', 'forgotPassword')->name('index');
+            Route::post('/forgot-password-process', 'forgotPasswordProcess')->name('process');
+        });
+
+        Route::name('validation_forgot_password.')->group(function () {
+            Route::get('/validation-forgot-password/{token}', 'validationForgotPassword')->name('index');
+            Route::post('/validation-forgot-password-process', 'validationForgotPasswordProcess')->name('process');
+        });
+    });
 });
 
 Route::middleware(['auth'])->group(function () {
-    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-    Route::get('/profile', [AuthController::class, 'profile'])->name('profile');
-    Route::post('/update-profile', [AuthController::class, 'updateProfile'])->name('updateProfile');
+
+    Route::controller(AuthController::class)->group(function () {
+        Route::post('/logout', 'logout')->name('logout');
+        Route::get('/profile', 'profile')->name('profile');
+        Route::post('/update-profile', 'updateProfile')->name('updateProfile');
+    });
 
     Route::middleware(['auth', 'admin'])->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'admin'])->name('dashboard');

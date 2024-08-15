@@ -36,7 +36,7 @@ class ResetPasswordMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'auth.mailResetPassword',
+            view: 'auth.mail-reset-password',
             with: [
                 'token' => $this->token
             ]
