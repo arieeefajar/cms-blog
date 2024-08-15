@@ -113,7 +113,7 @@
                             @foreach ($kategory as $item)
                                 <div class="form-check d-inline">
                                     <input type="checkbox" class="form-check-input" id="addKategory_{{ $item->id }}"
-                                        name="kategory_id[]" value="{{ $item->id }}">
+                                        name="category_id[]" value="{{ $item->id }}">
                                     <label class="form-check-label"
                                         for="addKategory_{{ $item->id }}">{{ $item->name }}</label>
                                 </div>
@@ -167,7 +167,7 @@
                             @foreach ($kategory as $item)
                                 <div class="form-check d-inline">
                                     <input type="checkbox" class="form-check-input"
-                                        id="addKategoryUpdate_{{ $item->id }}" name="kategory_id[]"
+                                        id="addKategoryUpdate_{{ $item->id }}" name="category_id[]"
                                         value="{{ $item->id }}">
                                     <label class="form-check-label"
                                         for="addKategoryUpdate_{{ $item->id }}">{{ $item->name }}</label>

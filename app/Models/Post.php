@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class PostModel extends Model
+class Post extends Model
 {
     use HasFactory;
 
@@ -19,19 +19,13 @@ class PostModel extends Model
         'user_id'
     ];
 
-    public function postKategory()
-    {
-
-        return $this->hasMany(PostKategoryModel::class, 'post_id', 'id');
-    }
-
     public function users()
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
-    public function kategory()
+    public function categories()
     {
-        return $this->belongsToMany(KategoryModel::class, 'post_kategory', 'post_id', 'kategory_id');
+        return $this->belongsToMany(Category::class, 'post_category', 'post_id', 'category_id');
     }
 }

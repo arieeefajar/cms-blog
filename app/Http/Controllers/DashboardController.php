@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\KategoryModel;
+use App\Models\Category;
 use App\Models\PostModel;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -15,7 +15,7 @@ class DashboardController extends Controller
     {
         $countPost = PostModel::where('status', 'publish')->count();
         $countAuthor = User::where('role', 'author')->count();
-        $countKategory = KategoryModel::count();
+        $countKategory = Category::count();
         $countPostPending = PostModel::where('status', 'pending')->count();
         return view('dashboard.admin', compact('countPost', 'countAuthor', 'countKategory', 'countPostPending'));
     }

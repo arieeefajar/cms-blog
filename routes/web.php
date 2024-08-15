@@ -4,7 +4,7 @@ use App\Http\Controllers\ApprovalPostController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Author\PostController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\categoryController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PostController as AdminPostController;
 use App\Http\Controllers\UserController;
 use Illuminate\Routing\RouteGroup;
@@ -69,7 +69,7 @@ Route::middleware(['auth'])->group(function () {
             Route::delete('/{id}', 'destroy')->name('destroy');
         });
 
-        Route::prefix('categories')->controller(categoryController::class)->name('categories.')->group(function () {
+        Route::prefix('categories')->controller(CategoryController::class)->name('categories.')->group(function () {
             Route::get('/', 'index')->name('index');
             Route::post('/', 'store')->name('store');
             Route::put('/{id}', 'update')->name('update');

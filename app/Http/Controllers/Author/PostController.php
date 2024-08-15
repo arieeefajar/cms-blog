@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Author;
 
 use App\Http\Controllers\Controller;
-use App\Models\KategoryModel;
+use App\Models\Category;
 use App\Models\PostKategoryModel;
 use App\Models\PostModel;
 use Illuminate\Http\Request;
@@ -15,7 +15,7 @@ class PostController extends Controller
     public function index()
     {
         $post = PostModel::with('kategory')->where('user_id', Auth::user()->id)->orderBy('created_at', 'desc')->get();
-        $kategory = KategoryModel::all();
+        $kategory = Category::all();
         return view('author.post', compact('post', 'kategory'));
     }
 
@@ -27,13 +27,13 @@ class PostController extends Controller
 
             'description.required' => 'Deskripsi harus diisi',
 
-            'kategory_id.required' => 'Harap pilih kategori',
+            'category_id.required' => 'Harap pilih kategori',
         ];
 
         $validator = Validator::make($request->all(), [
             'title' => 'required|max:25',
             'description' => 'required',
-            'kategory_id' => 'required',
+            'category_id' => 'required',
         ], $customMessage);
 
         if ($validator->fails()) {
@@ -48,16 +48,17 @@ class PostController extends Controller
 
         try {
             $post->save();
-            foreach ($request->kategory_id as $item) {
+            foreach ($request->category_id as $item) {
                 $postKategory = new PostKategoryModel();
                 $postKategory->post_id = $post->id;
-                $postKategory->kategory_id = $item;
+                $postKategory->category_id = $item;
                 $postKategory->save();
             }
             alert()->success('Berhasil', 'Mengajukan Postingan');
             return redirect()->back();
         } catch (\Throwable $th) {
             //throw $th;
+            return $th->getMessage();
             alert()->error('Gagal', 'Mengajukan Postingan');
             return redirect()->back();
         }
