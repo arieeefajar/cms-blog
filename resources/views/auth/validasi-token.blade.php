@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>CMS Blog - Login</title>
+    <title>SB Admin 2 - Forgot Password</title>
 
     <!-- Custom fonts for this template-->
     <link href="{{ asset('assets/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
@@ -38,33 +38,28 @@
                             <div class="col-lg-12">
                                 <div class="p-5">
                                     <div class="text-center">
-                                        <h1 class="h4 text-gray-900">Welcome Back!</h1>
-                                        <p class="text-gray-600">Silahkan Login Untuk Melanjutkan</p>
+                                        <h1 class="h4 text-gray-900 mb-3">Enter Your New Password?</h1>
                                     </div>
-                                    <form class="user" method="POST" action="{{ route('prosesLogin') }}">
+                                    <form class="user" action="{{ route('prosesValidasiForgotPassword') }}"
+                                        method="POST" id="newPassword">
                                         @csrf
+                                        <input type="hidden" name="token" value="{{ $token }}">
                                         <div class="form-group">
-                                            <input type="username" class="form-control form-control-user"
-                                                id="exampleInputUsername" name="username"
-                                                aria-describedby="usernameHelp" placeholder="Enter Username..." required
-                                                autofocus>
+                                            <input type="password" class="form-control form-control-user"
+                                                id="exampleInputpassword" name="password"
+                                                aria-describedby="passwordHelp" placeholder="Enter New Password"
+                                                required autofocus>
                                         </div>
                                         <div class="form-group">
                                             <input type="password" class="form-control form-control-user"
-                                                id="exampleInputPassword" name="password" placeholder="Password"
-                                                required>
+                                                id="exampleInputrepeatPassword" name="repeatPassword"
+                                                aria-describedby="repeatPasswordHelp"
+                                                placeholder="Enter Repeat Password" required autofocus>
                                         </div>
                                         <button type="submit" class="btn btn-primary btn-user btn-block">
-                                            Login
+                                            Reset Password
                                         </button>
                                     </form>
-                                    <hr>
-                                    <div class="text-center">
-                                        <a class="small" href="{{ route('forgotPassword') }}">Forgot Password?</a>
-                                    </div>
-                                    <div class="text-center">
-                                        <a class="small" href="{{ route('register') }}">Create an Account!</a>
-                                    </div>
                                 </div>
                             </div>
                         </div>

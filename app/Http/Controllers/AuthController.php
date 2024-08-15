@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ResetPasswordMail;
+use App\Models\PasswordResetTokenModel;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 use function Ramsey\Uuid\v1;
@@ -131,6 +135,104 @@ class AuthController extends Controller
         Auth::logout();
         toast('Logout Berhasil', 'success')->position('top')->autoClose(3000);
         return redirect()->route('login');
+    }
+
+    public function forgotPassword()
+    {
+        return view('auth.forgotPassword');
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $customMessage = [
+            'email.required' => 'Email harus diisi',
+            'email.email' => 'Email harus valid',
+            'email.exists' => 'Email tidak terdaftar',
+        ];
+
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|exists:users,email',
+        ], $customMessage);
+
+        if ($validator->fails()) {
+            toast($validator->messages()->all()[0], 'error')->position('top')->autoClose(3000);
+            return redirect()->back()->withInput();
+        }
+
+        $token = \Str::random(60);
+
+        PasswordResetTokenModel::updateOrCreate(
+            [
+                'email' => $request->email
+            ],
+            [
+                'email' => $request->email,
+                'token' => $token,
+                'created_at' => Carbon::now()
+            ]
+        );
+
+        Mail::to($request->email)->send(new ResetPasswordMail($token));
+
+        alert()->success('Berhasil', 'Reset Password, Silahkan Cek Email Anda Untuk Melanjutkan');
+        return redirect()->back();
+    }
+
+    public function validasiForgotPassword(Request $request, $token)
+    {
+        $getToken = PasswordResetTokenModel::where('token', $token)->first();
+
+        if (!$getToken) {
+            toast('Token Tidak Valid', 'error')->position('top')->autoClose(3000);
+            return redirect()->route('login');
+        }
+
+        return view('auth.validasi-token', compact('token'));
+    }
+
+    public function prosesValidasiForgotPassword(Request $request)
+    {
+        $customMessage = [
+            'password.required' => 'Password harus diisi',
+            'password.string' => 'Password harus berupa string',
+            'password.max' => 'Password maksimal 10 karakter',
+        ];
+
+        $validator = Validator::make($request->all(), [
+            'password' => 'required|string|max:10',
+        ], $customMessage);
+
+        if ($validator->fails()) {
+            toast($validator->messages()->all()[0], 'error')->position('top')->autoClose(3000);
+            return redirect()->back()->withInput();
+        }
+
+        $token = PasswordResetTokenModel::where('token', $request->token)->first();
+
+        if (!$token) {
+            toast('Token Tidak Valid', 'error')->position('top')->autoClose(3000);
+            return redirect()->route('login');
+        }
+
+        // return $request->all();
+
+        if ($request->password == $request->repeatPassword) {
+            $user = User::where('email', $token->email)->first();
+            $user->password = Hash::make($request->password);
+
+            try {
+                $user->save();
+                $token->delete();
+                toast('Password Berhasil diubah', 'success')->position('top')->autoClose(3000);
+                return redirect()->route('login');
+            } catch (\Throwable $th) {
+                toast('Password Gagal diubah', 'error')->position('top')->autoClose(3000);
+                return redirect()->route('login');
+            }
+        } else {
+            toast('Konfirmasi Password Tidak Sama', 'error')->position('top')->autoClose(3000);
+            return redirect()->back()->withInput();
+        }
     }
 
     public function profile()

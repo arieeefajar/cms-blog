@@ -31,6 +31,12 @@ Route::middleware(['guest'])->group(function () {
 
     Route::get('/register', [AuthController::class, 'register'])->name('register');
     Route::post('/proses-register', [AuthController::class, 'prosesRegister'])->name('prosesRegister');
+
+    Route::get('/forgot-password', [AuthController::class, 'forgotPassword'])->name('forgotPassword');
+    Route::post('/forgot-password', [AuthController::class, 'resetPassword'])->name('resetPassword');
+
+    Route::get('/validasi-forgot-password/{token}', [AuthController::class, 'validasiForgotPassword'])->name('validasiForgotPassword');
+    Route::post('/proses-validasi-forgot-password', [AuthController::class, 'prosesValidasiForgotPassword'])->name('prosesValidasiForgotPassword');
 });
 
 Route::middleware(['auth'])->group(function () {
