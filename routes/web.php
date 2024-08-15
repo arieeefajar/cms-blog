@@ -83,10 +83,10 @@ Route::middleware(['auth'])->group(function () {
             Route::delete('/{id}', 'destroy')->name('destroy');
         });
 
-        Route::prefix('approval-post')->group(function () {
-            Route::get('/', [ApprovalPostController::class, 'index'])->name('approval-post.index');
-            Route::put('/{id}', [ApprovalPostController::class, 'approve'])->name('approval-post.approve');
-            Route::put('/reject/{id}', [ApprovalPostController::class, 'reject'])->name('approval-post.reject');
+        Route::prefix('approval-post')->controller(ApprovalPostController::class)->name('approval-post.')->group(function () {
+            Route::get('/', 'index')->name('index');
+            Route::put('/{id}', 'approve')->name('approve');
+            Route::put('/reject/{id}', 'reject')->name('reject');
         });
     });
 

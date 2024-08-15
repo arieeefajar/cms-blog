@@ -13,7 +13,7 @@
                         <tr>
                             <th>No</th>
                             <th>Title</th>
-                            <th>Kategory</th>
+                            <th>Categories</th>
                             <th>Description</th>
                             <th>Action</th>
                         </tr>
@@ -22,21 +22,21 @@
                         <tr>
                             <th>No</th>
                             <th>Name</th>
-                            <th>Kategory</th>
+                            <th>Categories</th>
                             <th>Description</th>
                             <th>Action</th>
                         </tr>
                     </tfoot>
                     <tbody>
-                        @foreach ($post as $index => $item)
+                        @foreach ($posts as $item)
                             <tr class="text-center">
-                                <td>{{ $index + 1 }}</td>
+                                <td>{{ $loop->iteration }}</td>
                                 <td>{{ $item->title }}</td>
                                 <td>
                                     <ul class="list-unstyled">
-                                        @foreach ($item->kategory as $kategoryPost)
+                                        @foreach ($item->categories as $categoryPost)
                                             <li>
-                                                {{ $kategoryPost->name }}
+                                                {{ $categoryPost->name }}
                                             </li>
                                         @endforeach
                                     </ul>

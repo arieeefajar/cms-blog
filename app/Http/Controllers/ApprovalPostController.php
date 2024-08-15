@@ -2,20 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\PostModel;
+use App\Models\Post;
 use Illuminate\Http\Request;
 
 class ApprovalPostController extends Controller
 {
     public function index()
     {
-        $post = PostModel::where('status', 'pending')->orderBy('created_at', 'desc')->get();
-        return view('admin.approvalPost', compact('post'));
+        $posts = Post::where('status', 'pending')->orderBy('created_at', 'desc')->get();
+        return view('admin.approvalPost', compact('posts'));
     }
 
     public function approve($id)
     {
-        $post = PostModel::find($id);
+        $post = Post::find($id);
         $post->status_published = 'active';
         $post->status = 'published';
 
@@ -31,7 +31,7 @@ class ApprovalPostController extends Controller
 
     public function reject($id)
     {
-        $post = PostModel::find($id);
+        $post = Post::find($id);
         $post->status = 'rejected';
 
         try {
