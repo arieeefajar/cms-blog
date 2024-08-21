@@ -45,6 +45,19 @@
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <div class="alert-title">
+                                <h4>Whoops!</h4>
+                            </div>
+                            There are some problems with your input.
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
                     @yield('content')
                 </div>
                 <!-- /.container-fluid -->
