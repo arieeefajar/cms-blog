@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Author;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PostRequest;
 use App\Models\Category;
 use App\Models\Post;
 use App\Models\PostCategory;
@@ -19,28 +20,8 @@ class PostController extends Controller
         return view('author.post', compact('posts', 'categories'));
     }
 
-    public function store(Request $request)
+    public function store(PostRequest $request)
     {
-        $customMessage = [
-            'title.required' => 'Judul harus diisi',
-            'title.max' => 'Judul maksimal 25 karakter',
-
-            'description.required' => 'Deskripsi harus diisi',
-
-            'category_id.required' => 'Harap pilih kategori',
-        ];
-
-        $validator = Validator::make($request->all(), [
-            'title' => 'required|max:25',
-            'description' => 'required',
-            'category_id' => 'required',
-        ], $customMessage);
-
-        if ($validator->fails()) {
-            alert()->error('Gagal', $validator->messages()->all()[0]);
-            return redirect()->back()->withInput();
-        }
-
         $post = new Post();
         $post->title = $request->title;
         $post->description = $request->description;
@@ -64,28 +45,8 @@ class PostController extends Controller
         }
     }
 
-    public function update(Request $request, $id)
+    public function update(PostRequest $request, $id)
     {
-        $customMessage = [
-            'title.required' => 'Judul harus diisi',
-            'title.max' => 'Judul maksimal 25 karakter',
-
-            'description.required' => 'Deskripsi harus diisi',
-
-            'category_id.required' => 'Harap pilih kategori',
-        ];
-
-        $validator = Validator::make($request->all(), [
-            'title' => 'required|max:25',
-            'description' => 'required',
-            'category_id' => 'required',
-        ], $customMessage);
-
-        if ($validator->fails()) {
-            alert()->error('Gagal', $validator->messages()->all()[0]);
-            return redirect()->back()->withInput();
-        }
-
         $post = Post::find($id);
         $post->title = $request->title;
         $post->description = $request->description;

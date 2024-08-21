@@ -130,13 +130,13 @@
         //function approve
         function approveData(id) {
             const form = document.getElementById('approveForm');
-            form.action = "{{ route('approval-post.approve', ':id') }}".replace(':id', id);
+            form.action = "{{ route('approval-posts.approve', ':id') }}".replace(':id', id);
         }
 
         //function reject
         function rejectData(id) {
             const form = document.getElementById('rejectPost');
-            form.action = "{{ route('approval-post.reject', ':id') }}".replace(':id', id);
+            form.action = "{{ route('approval-posts.reject', ':id') }}".replace(':id', id);
         }
     </script>
 @endsection

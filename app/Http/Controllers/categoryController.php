@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -14,21 +15,8 @@ class CategoryController extends Controller
         return view('masterdata.category', compact('categories'));
     }
 
-    public function store(Request $request)
+    public function store(CategoryRequest $request)
     {
-        $customMessage = [
-            'required' => ':attribute harus diisi',
-        ];
-
-        $validator = Validator::make($request->all(), [
-            'name' => 'required',
-        ], $customMessage);
-
-        if ($validator->fails()) {
-            alert()->error('Gagal', $validator->messages()->all()[0]);
-            return redirect()->back()->withInput();
-        }
-
         $category = new Category();
         $category->name = $request->name;
 
@@ -42,21 +30,8 @@ class CategoryController extends Controller
         }
     }
 
-    public function update(Request $request, $id)
+    public function update(CategoryRequest $request, $id)
     {
-        $customMessage = [
-            'required' => ':attribute harus diisi',
-        ];
-
-        $validator = Validator::make($request->all(), [
-            'name' => 'required',
-        ], $customMessage);
-
-        if ($validator->fails()) {
-            alert()->error('Gagal', $validator->messages()->all()[0]);
-            return redirect()->back()->withInput();
-        }
-
         $category = Category::find($id);
         $category->name = $request->name;
 

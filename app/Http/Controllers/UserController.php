@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AuthorRequest;
+use App\Http\Requests\UpdateAuthorRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -11,41 +13,12 @@ class UserController extends Controller
 {
     public function index()
     {
-        $author = User::where('role', 'author')->orderBy('created_at', 'desc')->get();
-        return view('masterdata.users', compact('author'));
+        $authors = User::where('role', 'author')->orderBy('created_at', 'desc')->get();
+        return view('masterdata.users', compact('authors'));
     }
 
-    public function store(Request $request)
+    public function store(AuthorRequest $request)
     {
-        $customMessage = [
-            'fullname.required' => 'Fullname harus diisi',
-            'fullname.string' => 'Fullname harus berupa string',
-            'fullname.max' => 'Fullname maksimal 50 karakter',
-
-            'username.required' => 'Username harus diisi',
-            'username.string' => 'Username harus berupa string',
-            'username.max' => 'Username maksimal 6 karakter',
-
-            'password.required' => 'Password harus diisi',
-            'password.string' => 'Password harus berupa string',
-            'password.max' => 'Password maksimal 10 karakter',
-
-            'email.required' => 'Email harus diisi',
-            'email.email' => 'Email harus valid',
-        ];
-
-        $validator = Validator::make($request->all(), [
-            'fullname' => 'required|string|max:50',
-            'username' => 'required|string|max:6',
-            'password' => 'required|string|max:10',
-            'email' => 'required|email',
-        ], $customMessage);
-
-        if ($validator->fails()) {
-            alert()->error('Gagal', $validator->messages()->all()[0]);
-            return redirect()->back()->withInput();
-        }
-
         $email = User::where('email', $request->email)->first();
         if ($email) {
             alert()->error('Gagal', 'Email sudah terdaftar, silahkan gunakan email lain');
@@ -74,37 +47,8 @@ class UserController extends Controller
         }
     }
 
-    public function update(Request $request, $id)
+    public function update(UpdateAuthorRequest $request, $id)
     {
-        $customMessage = [
-            'fullname.required' => 'Fullname harus diisi',
-            'fullname.string' => 'Fullname harus berupa string',
-            'fullname.max' => 'Fullname maksimal 50 karakter',
-
-            'username.required' => 'Username harus diisi',
-            'username.string' => 'Username harus berupa string',
-            'username.max' => 'Username maksimal 6 karakter',
-
-            'email.required' => 'Email harus diisi',
-            'email.email' => 'Email harus valid',
-
-            'status.required' => 'Status harus diisi',
-            'status.in.active' => 'Status harus active',
-            'status.in.inactive' => 'Status harus inactive',
-        ];
-
-        $validator = Validator::make($request->all(), [
-            'fullname' => 'required|string|max:50',
-            'username' => 'required|string|max:6',
-            'email' => 'required|email',
-            'status' => 'required|in:active,inactive',
-        ], $customMessage);
-
-        if ($validator->fails()) {
-            alert()->error('Gagal', $validator->messages()->all()[0]);
-            return redirect()->back()->withInput();
-        }
-
         $user = User::find($id);
         $email = User::where('email', $request->email)->first();
 

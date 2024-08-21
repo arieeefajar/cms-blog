@@ -53,7 +53,7 @@
                     <a class="collapse-item {{ request()->routeIs('kategory.*') ? 'active' : '' }}"
                         href="{{ route('categories.index') }}">Category</a>
                     <a class="collapse-item {{ request()->routeIs('post-data.*') ? 'active' : '' }}"
-                        href="{{ route('post-data.index') }}">Post</a>
+                        href="{{ route('posts-data.index') }}">Post</a>
                 </div>
             </div>
         </li>
@@ -71,7 +71,7 @@
         <!-- Nav Item - post -->
         <li class="nav-item {{ request()->routeIs('approval-post.index') ? 'active' : '' }}">
             <a class="nav-link {{ request()->routeIs('approval-post.index') ? 'active' : '' }}"
-                href="{{ route('approval-post.index') }}">
+                href="{{ route('approval-posts.index') }}">
                 <i class="far fa-newspaper"></i>
                 <span>Approval Posts</span></a>
         </li>
