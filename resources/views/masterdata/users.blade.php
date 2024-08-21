@@ -34,9 +34,9 @@
                         </tr>
                     </tfoot>
                     <tbody>
-                        @foreach ($author as $index => $item)
+                        @foreach ($authors as $item)
                             <tr class="text-center">
-                                <td>{{ $index + 1 }}</td>
+                                <td>{{ $loop->iteration }}</td>
                                 <td>{{ $item->fullname }}</td>
                                 <td>{{ $item->username }}</td>
                                 <td>{{ $item->email }}</td>

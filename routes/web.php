@@ -76,14 +76,14 @@ Route::middleware(['auth'])->group(function () {
             Route::delete('/{id}', 'destroy')->name('destroy');
         });
 
-        Route::prefix('post-data')->controller(AdminPostController::class)->name('post-data.')->group(function () {
+        Route::prefix('posts-data')->controller(AdminPostController::class)->name('posts-data.')->group(function () {
             Route::get('/', 'index')->name('index');
             Route::post('/', 'store')->name('store');
             Route::put('/{id}', 'update')->name('update');
             Route::delete('/{id}', 'destroy')->name('destroy');
         });
 
-        Route::prefix('approval-post')->controller(ApprovalPostController::class)->name('approval-post.')->group(function () {
+        Route::prefix('approval-posts')->controller(ApprovalPostController::class)->name('approval-posts.')->group(function () {
             Route::get('/', 'index')->name('index');
             Route::put('/{id}', 'approve')->name('approve');
             Route::put('/reject/{id}', 'reject')->name('reject');

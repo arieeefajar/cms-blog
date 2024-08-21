@@ -11,8 +11,8 @@ class UserController extends Controller
 {
     public function index()
     {
-        $author = User::where('role', 'author')->orderBy('created_at', 'desc')->get();
-        return view('masterdata.users', compact('author'));
+        $authors = User::where('role', 'author')->orderBy('created_at', 'desc')->get();
+        return view('masterdata.users', compact('authors'));
     }
 
     public function store(Request $request)

@@ -99,7 +99,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('post-data.store') }}" method="POST" id="addForm">
+                    <form action="{{ route('posts-data.store') }}" method="POST" id="addForm">
                         @csrf
                         <div class="form-group">
                             <label for="exampleTitle" class="form-label">Title</label>
@@ -263,7 +263,7 @@
         function updateData(data) {
             console.log(data);
             const form = document.getElementById('updateForm');
-            form.action = "{{ route('post-data.update', ':id') }}".replace(':id', data.id);
+            form.action = "{{ route('posts-data.update', ':id') }}".replace(':id', data.id);
             form.querySelector('#addTitleUpdate').value = data.title;
             form.querySelector('#addDescriptionUpdate').value = data.description;
 
@@ -298,7 +298,7 @@
         //function delete
         function deleteData(id) {
             const form = document.getElementById('deleteForm');
-            form.action = "{{ route('post-data.destroy', ':id') }}".replace(':id', id);
+            form.action = "{{ route('posts-data.destroy', ':id') }}".replace(':id', id);
         }
     </script>
 @endsection
